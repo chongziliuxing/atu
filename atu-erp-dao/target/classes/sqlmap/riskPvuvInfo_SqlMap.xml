@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="riskPvuvInfo" >
+  <resultMap id="riskPvuvInfoResult" class="com.atu.erp.domain.RiskPvuvInfo" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="PAGE_ID" property="pageId" jdbcType="INTEGER" />
+    <result column="PAGE_NAME" property="pageName" jdbcType="VARCHAR" />
+    <result column="PV" property="pv" jdbcType="INTEGER" />
+    <result column="UV" property="uv" jdbcType="INTEGER" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="INTEGER" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIED_TIME" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+  	   ID = #id:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="pageId" >
+  	   PAGE_ID = #pageId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="pageName" >
+  	   PAGE_NAME = #pageName:VARCHAR#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="pv" >
+  	   PV = #pv:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="uv" >
+  	   UV = #uv:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="projectId" >
+  	   PROJECT_ID = #projectId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="createTime" >
+  	   CREATE_TIME = #createTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="modifiedTime" >
+  	   MODIFIED_TIME = #modifiedTime:TIMESTAMP#
+  	  </isNotNull>
+  	 </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="riskPvuvInfoResult" parameterClass="java.lang.Integer" >
+    select 
+    ID,PAGE_ID,PAGE_NAME,PV,UV,PROJECT_ID,CREATE_TIME,MODIFIED_TIME
+    from risk_pvuv_info
+    where ID = #id#
+  </select>
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.RiskPvuvInfo" >
+    insert into risk_pvuv_info (
+    PAGE_ID,PAGE_NAME,PV,UV,PROJECT_ID,CREATE_TIME,MODIFIED_TIME
+    ) values(
+    #pageId#,#pageName#,#pv#,#uv#,#projectId#,#createTime#,#modifiedTime#
+    )
+    <selectKey resultClass="java.lang.Integer" keyProperty="id">
+      <![CDATA[SELECT @@IDENTITY AS ID ]]>
+    </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.RiskPvuvInfo" >
+    update risk_pvuv_info set ID = ID
+    <dynamic>
+      <isNotNull prepend="," property="pageId" >
+        PAGE_ID = #pageId#
+      </isNotNull>
+      <isNotNull prepend="," property="pageName" >
+        PAGE_NAME = #pageName#
+      </isNotNull>
+      <isNotNull prepend="," property="pv" >
+        PV = #pv#
+      </isNotNull>
+      <isNotNull prepend="," property="uv" >
+        UV = #uv#
+      </isNotNull>
+      <isNotNull prepend="," property="projectId" >
+        PROJECT_ID = #projectId#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="modifiedTime" >
+        MODIFIED_TIME = #modifiedTime#
+      </isNotNull>
+    </dynamic>
+	  where ID = #id# 
+  </update>
+
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.RiskPvuvInfoQuery" resultClass="java.lang.Integer" >
+    select count(1) from risk_pvuv_info
+    <include refid="riskPvuvInfo.condition" />
+  </select>
+
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.RiskPvuvInfoQuery" resultMap="riskPvuvInfoResult" >
+    select 
+    ID,PAGE_ID,PAGE_NAME,PV,UV,PROJECT_ID,CREATE_TIME,MODIFIED_TIME
+    from risk_pvuv_info
+    <include refid="riskPvuvInfo.condition" />
+  </select>
+
+  <!-- 分页条件查询列表 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.RiskPvuvInfoQuery" resultMap="riskPvuvInfoResult" >
+    select 
+    ID,PAGE_ID,PAGE_NAME,PV,UV,PROJECT_ID,CREATE_TIME,MODIFIED_TIME
+    from risk_pvuv_info
+    <include refid="riskPvuvInfo.condition" />
+    limit #start#,#pageSize#
+  </select>
+</sqlMap>

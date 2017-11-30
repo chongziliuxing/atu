@@ -1,0 +1,36 @@
+	<div class="box">
+           <div class="title">
+           		促销活动信息
+           </div>
+		   
+           <table style="border-collapse: collapse;" id="TH">
+        	<tr style="font-weight: bold;">
+				<th class="tdgoods" style="width: 100px" >商品ID</th>
+				<th class="tdgoods" style="width: 100px">SKU ID</th>
+				<th class="tdgoods" style="width: 100px">供应量</th>
+				<th class="tdgoods" style="width: 100px">状态</th>
+				<th class="tdgoods" style="width: 100px">目前售价(元)</th>
+				<th class="tdgoods" style="width: 100px">直降(元)</th>
+				<th class="tdgoods" style="width: 100px">直降后售价(元)</th>
+			</tr>
+			#foreach($promotionSku in $resultMap.promotionSkuList)
+			 <tr align="center">
+                <td style="width: 100px">$!{promotionSku.itemId}</td>
+                <td style="width: 100px">$!{promotionSku.skuId}</td>
+                <td style="width: 100px">$!{promotionSku.stock}</td>
+                <td style="width: 100px">
+                	#if($!{promotionSku.itemStatus} == 1) 上架
+                	#else 未上架 #end
+                </td>
+                <td style="width: 100px">$!{promotionSku.tbPrice}</td>
+                <td style="width: 100px">
+	                $!{promotionSku.deductionPrice}
+                </td>
+                <td style="width: 100px">
+                <span id="newPrice_$!{promotionSku.skuId}">$!{promotionSku.lastPrice}</span>
+                </td>
+              </tr>
+             #end
+        </table>	
+	</div>
+	

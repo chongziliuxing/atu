@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="BalanceInfo" >
+  <resultMap id="BalanceInfoResult" class="com.atu.erp.domain.BalanceInfo" >
+    <result column="balance_id" property="balanceId"  />
+    <result column="balance_date_end" property="balanceDateEnd" jdbcType="TIMESTAMP" />
+    <result column="balance_date_start" property="balanceDateStart" jdbcType="TIMESTAMP" />
+    <result column="ought_pay_money" property="oughtPayMoney" />
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+    <result column="vender_user_id" property="venderUserId"  />
+    <result column="order_money_all" property="orderMoneyAll"  />
+    <result column="payment_goods" property="paymentGoods"  />
+    <result column="commission" property="commission"  />
+    <result column="balance_money" property="balanceMoney"  />
+    <result column="balance_money_fact" property="balanceMoneyFact"  />
+    <result column="balance_status" property="balanceStatus"  />
+    <result column="reason" property="reason"  />
+    <result column="bank_number" property="bankNumber"  />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+	
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="balanceId" >
+        balance_id = #balanceId#
+      </isNotNull>
+  	  <isNotNull prepend="and" property="venderUserId" >
+        vender_user_id = #venderUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="orderMoneyAll" >
+        order_money_all = #orderMoneyAll#
+      </isNotNull>
+      <isNotNull prepend="and" property="paymentGoods" >
+        payment_goods = #paymentGoods#
+      </isNotNull>
+      <isNotNull prepend="and" property="commission" >
+        commission = #commission#
+      </isNotNull>
+      <isNotNull prepend="and" property="balanceMoney" >
+        balance_money = #balanceMoney#
+      </isNotNull>
+      <isNotNull prepend="and" property="balanceMoneyFact" >
+        balance_money_fact = #balanceMoneyFact#
+      </isNotNull>
+      <isNotNull prepend="and" property="balanceStatus" >
+        balance_status = #balanceStatus#
+      </isNotNull>
+      
+      <isNotNull prepend="and" property="startTime" >
+        <![CDATA[
+ 			balance_date_end >= #startTime#
+		]]>
+      </isNotNull>
+     <isNotNull prepend="and" property="endTime" >
+        <![CDATA[
+ 			balance_date_end < DATE_ADD(#endTime#,INTERVAL 1 DAY)
+		]]>
+      </isNotNull>
+      
+    </dynamic>
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BalanceInfoResult" parameterClass="java.lang.Integer" >
+    select 
+    balance_id,vender_user_id,ought_pay_money,pay_date,balance_money_fact,balance_date_end,balance_date_start,order_money_all,payment_goods,commission,balance_money,balance_status,reason,bank_number,created,modified
+    from balance_info
+    where balance_id = #balanceId#
+  </select>
+
+  <insert id="insert" parameterClass="com.atu.erp.domain.BalanceInfo" >
+    insert into balance_info (pay_date,ought_pay_money,balance_date_end,balance_date_start,vender_user_id,order_money_all,payment_goods,commission,balance_money,balance_money_fact,balance_status,bank_number,created,modified,reason)
+    values (now(),#oughtPayMoney#,#balanceDateEnd#,#balanceDateStart#,#venderUserId#,#orderMoneyAll#,#paymentGoods#,#commission#,#balanceMoney#,#balanceMoneyFact#,#balanceStatus#,#bankNumber#,now(), now(),#reason#)
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="balanceId">
+			<![CDATA[SELECT @@IDENTITY AS balance_id ]]>
+	  </selectKey>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.BalanceInfo" >
+    update balance_info set modified = now()
+    <dynamic >
+  	  <isNotNull prepend="," property="reason" >
+        reason = #reason#
+      </isNotNull>
+      <isNotNull prepend="," property="orderMoneyAll" >
+        order_money_all = #orderMoneyAll#
+      </isNotNull>
+      <isNotNull prepend="," property="paymentGoods" >
+        payment_goods = #paymentGoods#
+      </isNotNull>
+      <isNotNull prepend="," property="commission" >
+        commission = #commission#
+      </isNotNull>
+      <isNotNull prepend="," property="balanceMoney" >
+        balance_money = #balanceMoney#
+      </isNotNull>
+      <isNotNull prepend="," property="balanceMoneyFact" >
+        balance_money_fact = #balanceMoneyFact#
+      </isNotNull>
+      <isNotNull prepend="," property="balanceStatus" >
+        balance_status = #balanceStatus#
+      </isNotNull>
+    </dynamic>
+    where balance_id = #balanceId#
+  </update>
+  
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.BalanceInfoQuery" resultClass="java.lang.Integer" >
+    select count(1) from balance_info
+    <include refid="BalanceInfo.condition" />
+  </select>
+  
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.BalanceInfoQuery" resultMap="BalanceInfoResult" >
+    select 
+    balance_id,vender_user_id,ought_pay_money,pay_date,balance_money_fact,balance_date_end,balance_date_start,order_money_all,payment_goods,commission,balance_money,balance_status,reason,bank_number,created,modified
+    from balance_info
+    <include refid="BalanceInfo.condition" />
+    order by balance_id desc
+  </select>
+  
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.BalanceInfoQuery" resultMap="BalanceInfoResult" >
+    select 
+    balance_id,vender_user_id,ought_pay_money,pay_date,balance_money_fact,balance_date_end,balance_date_start,order_money_all,payment_goods,commission,balance_money,balance_status,reason,bank_number,created,modified
+    from balance_info
+    <include refid="BalanceInfo.condition" />
+    order by balance_id desc
+  	limit #start#,#pageSize#
+  </select>
+</sqlMap>

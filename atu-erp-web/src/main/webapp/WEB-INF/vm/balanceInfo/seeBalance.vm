@@ -1,0 +1,167 @@
+    <div class="box">
+           <div class="title">
+           		结算单
+           </div>
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td width="100%" align="left" colspan="10" class="TdValue">
+                			&nbsp;&nbsp;&nbsp;
+		                	#if($!balanceInfo.balanceStatus==1)
+		                	    <span style="font-weight:700;color:green;">新申请</span>-》商家已确认-》财务审核通过-》已完成收/付款
+		                	#end
+		                	#if($!balanceInfo.balanceStatus==2)
+		                		<span style="font-weight:700;color:green;">新申请-》商家已确认-》财务审核通过</span>-》已完成收/付款
+		                	#end
+		                	#if($!balanceInfo.balanceStatus==3)
+		                		<span style="font-weight:700;color:green;">新申请-》商家已确认-》财务审核驳回</span>-》已完成收/付款
+		                	#end
+		                	#if($!balanceInfo.balanceStatus==4)
+		                		<span style="font-weight:700;color:green;">新申请-》商家已确认-》财务审核通过-》已完成收/付款</span>
+		                	#end
+		                	#if($!balanceInfo.balanceStatus==5)
+		                		冻结
+		                	#end
+		                	#if($!balanceInfo.balanceStatus==6)
+		                		<span style="font-weight:700;color:green;">新申请-》商家已确认</span>-》财务审核通过-》已完成收/付款
+		                	#end
+                		</td>
+                	</tr>
+                	<tr>
+                		<td width="100%" align="left" colspan="10" class="TdValue">
+                		 	&nbsp;&nbsp;&nbsp;请核查贵司的结算单信息，如无误，请确认结算单，进入下一结算流程 &nbsp;&nbsp;
+                		 	<input type="button" value="查看明细" onclick="detail($!balanceInfo.balanceId)" />
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+		   <div class="title">
+                                      阿土网供应商结算单
+           </div>
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">商家名称：</div></td>
+                		<td width="30%" align="left"  class="TdValue">
+                			$!{businessUserExt.shopName}
+                		</td>
+                		<td class="TdLabel"><div align="right"> 结算单编号：</div></td>
+                		<td width="30%" align="left"  class="TdValue">
+                			$!balanceInfo.balanceId
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">商家编号：</div></td>
+                		<td width="30%" align="left"  class="TdValue">
+                			$!balanceInfo.venderUserId
+                		</td>
+                		<td class="TdLabel"><div align="right"> 支付时间：</div></td>
+                		<td width="30%" align="left"  class="TdValue">
+                			$!{dateFormatUtils.format($balanceInfo.payDate, "yyyy-MM-dd:HH:mm:ss")}
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+		 <!--   <div class="title">
+           		结算信息
+           </div>
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="center">业务类型</div></td>
+                		<td class="TdLabel"><div align="center">收付发票机构 </div></td>
+                		<td class="TdLabel"><div align="center">项目</div></td>
+                		<td class="TdLabel"><div align="center">结算金额</div></td>
+                	</tr>
+                	<tr>
+                		<td  align="left"  class="TdValue">pop</td>
+                		<td  align="left"  class="TdValue">$!{businessUserExt.billOrg}</td>
+                		<td  align="left"  class="TdValue">货款:${balanceInfo.paymentGoods}， 佣金:-${balanceInfo.commission}</td>
+                		#set($balanceMoney=${balanceInfo.paymentGoods}-${balanceInfo.commission})
+                		<td  align="left"  class="TdValue">${balanceMoney}</td>
+                	</tr>
+                	<tr>
+                	    <td  align="left"  class="TdValue" style="border:none;"></td>
+                		<td  align="left"  class="TdValue" style="border:none;"></td>
+                		<td  align="left"  class="TdValue" style="border:none;"></td>
+                		<td  align="right"  class="TdValue"  style="border:none;border-top:2px solid black;"><span style="float:right;">${balanceMoney}</span></td>
+                	</tr>
+				</table>
+		   </div>
+		   <div class="title">
+           		烦请按如下信息付款
+           </div>
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="title" align="center" width="50%" >POP运营机构</td>
+                		<td class="title" align="center" width="50%" >供应商开票信息</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" >
+                			公司名称：
+                			&nbsp;北京阿土信息技术有限公司
+                		</td>
+                		<td  align="left" >
+                			公司名称：&nbsp;$!{businessUserExt.shopName}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" >
+                			纳税人识别号：&nbsp;3213*453464564575665
+                		</td>
+                		<td  align="left" >
+                			纳税人识别号：&nbsp;$!{businessUserExt.taxCode}
+                		</td>
+                	</tr>
+                     <tr>
+                		<td  align="left" >
+                			地址：&nbsp;朝阳区区经济开发区商务中心
+                		</td>
+                		<td  align="left" >
+                			地址：&nbsp;$!{businessUserExt.address}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" >
+                		           电话：&nbsp;400-004-7933
+                		</td>
+                		<td  align="left" >
+                			电话：&nbsp;$!{businessUserExt.phone}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" >
+                			开户行：&nbsp;建行北京清华园支行营业部
+                		</td>
+                		<td  align="left" >
+                			开户行：&nbsp;$!{businessUserExt.bank}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" >
+                			账号：&nbsp;1100 1079 9000 5300 6001
+                		</td>
+                		<td  align="left" >
+                			账号：&nbsp;$!{businessUserExt.bankAc}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" colspan="2" >
+                			&nbsp;&nbsp;尊敬的供应商，如数据核对无误，请确认结算单。
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" colspan="2" >
+                			&nbsp;&nbsp;如对结算数据明细有异议，可以致电客服或者发送邮件至**********咨询。
+                		</td>
+                	</tr>
+                	<tr>
+                		<td  align="left" colspan="2" >
+                			&nbsp;&nbsp;其余结算流程相关问题，可以致电客服或者发送邮件至**********咨询。
+                		</td>
+                	</tr>
+				</table>
+		   </div> -->
+	</div>
+	

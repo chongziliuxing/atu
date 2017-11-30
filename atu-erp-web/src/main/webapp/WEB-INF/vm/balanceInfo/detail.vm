@@ -1,0 +1,166 @@
+<div class="box">
+           <div class="title">
+           		本期结算
+           </div>
+           <div class="panel_form" >
+				<table width="640px" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">结算单号：</div></td>
+                		<td width="10%" align="left" colspan="10" class="TdValue">
+                		    $!balanceInfo.balanceId
+                		</td>
+                		<td class="TdLabel"><div align="right">商家编号：</div></td>
+                		<td width="10%" align="left" colspan="10" class="TdValue">
+                			$!balanceInfo.venderUserId
+                		</td>
+                		<td class="TdLabel"><div align="right">结算日期：</div></td>
+                		<td width="12%" align="left" colspan="10" class="TdValue">
+                			$!{dateFormatUtils.format($balanceInfo.balanceDateStart, "yyyy-MM-dd")}<br>至<br>
+                	        $!{dateFormatUtils.format($balanceInfo.balanceDateEnd, "yyyy-MM-dd")}
+                		</td>
+                		<td width="28%" align="left" colspan="10" class="TdValue">
+                			<input type="button" value="查看结算单" onclick="seeBalance($!balanceInfo.balanceId)" />&nbsp;&nbsp;<input type="button" onclick="doExcelDetailOrderList();" value="导出结算明细"/>
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+		   <div class="title">
+           		商家应收款项
+           </div>
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">应收货款：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			=(货款)-(佣金)
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">商家应收小计：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!balanceInfo.paymentGoods元
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+		   <div class="title">
+           		商家应付款项
+           </div>
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">应付货款：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!{balanceInfo.oughtPayMoney}元
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">商家应付小计：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!{balanceInfo.oughtPayMoney}元
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">商家应结金额：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                		#set($oughtPayMoney=${balanceInfo.paymentGoods}-${balanceInfo.oughtPayMoney})
+                        $!{oughtPayMoney} 元 = $!{balanceInfo.paymentGoods} 元(应收金额) - $!{balanceInfo.oughtPayMoney} 元(应付金额)
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+	</div>
+ <script type="text/javascript">
+    function showTab(showIndex,hideIndex){
+     $(".contentDiv").show();
+	 $(".cur").removeClass("cur");
+	 $(".contentDiv:eq("+hideIndex+")").hide();
+	 $(".tabList ul li:eq("+showIndex+")").addClass("cur"); 
+     $(".contentDiv:eq("+showIndex+")").addClass("cur"); 
+	 queryDetailOrderList(showIndex);
+	 $("#detailOrderListFrame"+showIndex).show();
+	 $("#detailOrderListFrame"+hideIndex).hide();
+	}
+	function queryDetailOrderList(label){
+	   //label=0，已完成订单，label=1,未完成订单
+	   $("#detailOrderListFrame"+label).contents().find("#venderUserId").val($!balanceInfo.venderUserId);
+	   var orderId=$(".contentDiv input[name=orderId]:eq("+label+")").val();
+	   if(isNaN(orderId)){
+	     alert('订单编号只能为数字！');
+	     $(".contentDiv input[name=orderId]:eq("+label+")").val("");
+	     return ;
+	   }
+       $("#detailOrderListFrame"+label).contents().find("#orderId").val(orderId);
+       var startTime=$(".contentDiv input[name=startTime]:eq("+label+")").val();
+       var endTime=$(".contentDiv input[name=endTime]:eq("+label+")").val();
+       if(startTime !=''){
+        $("#detailOrderListFrame"+label).contents().find("#startTime").val(startTime+" 00:00:00");
+       }
+       if(endTime!=''){
+        $("#detailOrderListFrame"+label).contents().find("#endTime").val(endTime+" 00:00:00");
+       }
+
+       $("#detailOrderListFrame"+label).contents().find("#orderStatus").val($(".contentDiv input[name=orderStatus]:eq("+label+")").val());
+       $("#detailOrderListFrame"+label).contents().find("#f1").submit();
+	}
+ </script>
+ 
+	<div id="tab" style="margin-left:10px;margin-top:20px">
+	  <div class="tabList">
+		<ul>
+		<li class="cur" onclick="showTab(0,1);">完成订单</li>
+		<li  onclick="showTab(1,0);">其他订单</li>
+		<li style="border:none;border-left:1px solid #ccc;border-bottom:1px solid #ccc;width:610px;height:22px;float:left;"></li>
+		</ul>
+	  </div>
+	  <div class="tabCon">
+		<div class="contentDiv cur" >    
+				<table width="640px" cellspacing="0" cellpadding="0" border="0" >
+                	<tr>
+                		<td width="50px" align="right">订单号：</td>
+                		<td width="10%" align="left">
+                		    <input type="text"   name="orderId" value="" maxLength="10"/>
+                		    <input type="hidden"   name="orderStatus" value="50" />
+                		</td>
+                		<td width="50px" align="right">下单时间：</td>
+                		<td width="250px" align="left">
+                		    <input type="hidden" id="balanceDateStart" value="$!{dateFormatUtils.format($balanceInfo.balanceDateStart, 'yyyy-MM-dd')}"/>
+                		    <input type="hidden" id="balanceDateEnd" value="$!{dateFormatUtils.format($balanceInfo.balanceDateEnd, 'yyyy-MM-dd')}"/>
+                			<input type="text" id="startTime" name="startTime" value="" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />至
+                	        <input type="text" id="endTime" name="endTime" value="" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                		</td>
+                		<td width="50px" align="left"  class="TdValue">
+                			<input type="button" onclick="queryDetailOrderList(0);" value="&nbsp;&nbsp;查询&nbsp;&nbsp;"/>
+                		</td>
+                	</tr>
+				</table>
+				
+              <iframe src="/orderInfo/detailOrderList?orderStatus=50&balanceId=$!{balanceInfo.balanceId}"  id="detailOrderListFrame0"  width="670px" cellspacing="0" cellpadding="0" border="0" frameborder="no" />
+
+	
+	</div>
+	  <div class="contentDiv">
+             	<table width="640px" cellspacing="0" cellpadding="0" border="0" >
+                	<tr>
+                		<td width="50px" align="right">订单号：</td>
+                		<td width="10%" align="left">
+                		    <input type="text"  name="orderId" value="" />
+                		    <input type="hidden"   name="orderStatus" value="-1" />
+                		</td>
+                		<td width="50px" align="right">下单时间：</td>
+                		<td width="250px" align="left">
+                			<input type="text" id="startTime" name="startTime" value="$!{dateFormatUtils.format($balanceInfo.balanceDateStart, 'yyyy-MM-dd')}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />至
+                	        <input type="text" id="endTime" name="endTime" value="$!{dateFormatUtils.format($balanceInfo.balanceDateEnd, 'yyyy-MM-dd')}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+                		</td>
+                		<td width="50px" align="left"  class="TdValue">
+                			<input type="button" onclick="queryDetailOrderList(1);" value="&nbsp;&nbsp;查询&nbsp;&nbsp;"/>
+                		</td>
+                	</tr>
+				</table>
+             <iframe src="/orderInfo/detailOrderList?orderStatus=-1" style="display:none" onclick="queryDetailOrderList(1);" id="detailOrderListFrame1" width="670px"  frameborder="no" />
+ 
+      </div>
+	  </div>
+	</div>
+
+

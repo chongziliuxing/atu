@@ -1,0 +1,167 @@
+	<div class="box">
+           <div class="title">
+           		优惠券信息
+           </div>
+		   
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券活动编号号：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.couponPromoId
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券活动编码：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.couponPromoCode
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券类型：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			#if($!tbCouponPromo.couponType==0)
+		                		满减券$!tbCouponPromo.orderQuota - $!tbCouponPromo.couponAmount
+		                	#end
+		                	#if($!tbCouponPromo.couponType==1)
+		                		直减券$!tbCouponPromo.couponAmount
+		                	#end
+		                	#if($!tbCouponPromo.couponType==2)
+		                		免运费券（仅限39元以下订单使用）
+		                	#end
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券活动名称：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.couponPromoName
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券业务类型：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			#if($!tbCouponPromo.couponBusinessType==1)
+		                		直接发放到账号
+		                	#end
+		                	#if($!tbCouponPromo.couponBusinessType==2)
+		                		用户行为相关
+		                	#end
+		                	#if($!tbCouponPromo.couponBusinessType==3)
+		                		通过链接领取
+		                	#end
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券申请数量：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.couponApplyAmount
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券发放数量：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.couponGrantAmount
+                		</td>
+                	</tr>
+                	#if($!tbCouponPromo.couponValidType==0)
+                		<tr>
+	                		<td class="TdLabel"><div align="right">优惠券有效时间：</div></td>
+	                		<td width="78%" align="left" colspan="10" class="TdValue">
+			                		有效期为 $!tbCouponPromo.couponValidDays 天
+	                		</td>
+                		</tr>
+                	#end
+                	#if($!tbCouponPromo.couponValidType==1)
+                		<tr>
+	                		<td class="TdLabel"><div align="right">活动开始时间：</div></td>
+	                		<td width="78%" align="left" colspan="10" class="TdValue">
+	                			$!{dateFormatUtils.format($!tbCouponPromo.promoStarttime)}
+	                		</td>
+                		</tr>
+                		<tr>
+	                		<td class="TdLabel"><div align="right">活动结束时间：</div></td>
+	                		<td width="78%" align="left" colspan="10" class="TdValue">
+	                			$!{dateFormatUtils.format($!tbCouponPromo.promoEndtime)}
+	                		</td>
+                		</tr>
+                	#end
+                	<tr>
+	                	<td class="TdLabel"><div align="right">活动有效开始时间：</div></td>
+	                	<td width="78%" align="left" colspan="10" class="TdValue">
+	                		$!{dateFormatUtils.format($!tbCouponPromo.couponValidStarttime)}
+	                	</td>
+                	</tr>
+                	<tr>
+	                	<td class="TdLabel"><div align="right">活动有效结束时间：</div></td>
+	                	<td width="78%" align="left" colspan="10" class="TdValue">
+	                		$!{dateFormatUtils.format($!tbCouponPromo.couponValidEndtime)}
+	                	</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券活动状态：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			#if($!tbCouponPromo.couponPromoState==0)
+		                		待上线
+		                	#end
+		                	#if($!tbCouponPromo.couponPromoState==1)
+		                		正在进行
+		                	#end
+		                	#if($!tbCouponPromo.couponPromoState==2)
+		                		已结束
+		                	#end
+		                	#if($!tbCouponPromo.couponPromoState==3)
+		                		已过期
+		                	#end
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">操作者：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.opera
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">操作时间：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!{dateFormatUtils.format($!tbCouponPromo.operaTime)}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">申请人名称：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.applyUserName
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">申请部门名称：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.applyDepartmentName
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">申请时间：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!{dateFormatUtils.format($!tbCouponPromo.applyTime)}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠券已使用数量：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!tbCouponPromo.couponUsedAmount
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">限制条件：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			#if($!tbCouponPromo.limitCondition==0)
+		                		没有
+		                	#end
+		                	#if($!tbCouponPromo.limitCondition==1)
+		                		必须是首单才发放
+		                	#end
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+	</div>
+	

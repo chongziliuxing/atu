@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>指标汇总</title>
+        
+        <link type="text/css" rel="stylesheet" href="/misc/css/admin.css"/>
+        <link type="text/css" rel="stylesheet" href="/misc/css/survey.css"/>
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+        <script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script> 
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">总体指标数据日汇总</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    <form id="f1">
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	系统来源：
+                </td>
+                <td align="left" style="width:100px">
+                	<select name="projectId"  style="width: 130px; margin-left: 5px;">
+                		<option  #if($!query.projectId==0) selected="selected" #end value="0"> 全部 </option>
+						<option  #if($!query.projectId==10) selected="selected" #end value="10"> 电脑版 </option>
+						<option  #if($!query.projectId==20) selected="selected" #end value="20"> 网页版 </option>
+						<option  #if($!query.projectId==30) selected="selected" #end value="30"> 安卓版 </option>
+						<option  #if($!$!query.projectId==40) selected="selected" #end value="40"> 苹果版 </option>
+					</select>
+				</td>
+				<td align="right" style="width:100px">
+                	时间：
+                </td>
+                <td align="left" style="width:400px">
+                	<input type="text" name="startTime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!query.startTime,'yyyy-MM-dd')}" style="margin-left: 5px"/>至
+                    <input type="text" name="endTime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!query.endTime,'yyyy-MM-dd')}" />
+					<input type="button"  value="查询" id="query" style="margin-left: 30px"/>
+				</td>
+            </tr>
+        </table>
+    </div> 
+    </form>
+    <!--查询区结束-->  
+    <br/>
+    <!--展示区结束-->
+    <div class="panel_grid">
+        <table>
+            <tr>
+                <th>日期</th>
+                <th>PV</th>
+                <th>UV</th>
+                <!-- <th>访问次数</th> -->
+                <th>下单客户数</th>
+                <th>订单数</th>
+                <th>下单金额</th>
+                <th>客单价</th>
+            </tr>
+            #foreach($risk in $list)
+				<tr id = "${risk.id}">
+				    <td>$!{dateFormatUtils.format($!risk.keyDate,'yyyy-MM-dd')}</td>
+	             	<td>$!risk.pv</td>
+	                <td>$!risk.uv</td>
+	                <td>$!risk.orderConsumer</td>
+	                <td>$!risk.orderNumber</td>
+	                <td>$!risk.orderMoney</td>
+	                <td>$!risk.guestUnitMoney</td>
+	            </tr>
+            #end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">                      					 																
+        #set($pageModule = $mainModule.getTarget("/lookData/statistics").addQueryData("projectId",$query.projectId).addQueryData("startTime",$!{dateFormatUtils.format($query.startTime)}).addQueryData("endTime",$!{dateFormatUtils.format($query.endTime)}))
+		#showPage($pageModule $list)
+        </div>
+    </div>
+    <!--展示区结束	-->
+</div>
+<!--盒子结束--> 
+<script language="javascript" >
+	$(function(){
+		$("#query").click(function(){
+			$("#f1").attr("action","/lookData/statistics");
+			$("#f1").attr("method","post");
+			$("#f1").submit();
+		});
+	});
+</script>
+</body>
+</html>

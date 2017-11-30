@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>优惠券财务统计</title>
+        
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="$assetModule.getTarget("/js/coupon/coupon.js")"></script>
+		<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script> 
+		<link type="text/css" rel="stylesheet" href="/misc/css/admin.css"/>
+		
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">优惠券财务统计</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    <form id="f1">
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	部门：
+                </td>
+                <td align="left" style="width:100px">
+                	<select style="width: 130px">
+						<option>市场部</option>
+					</select>
+				</td>
+				<td align="right" style="width:100px">
+                	发放业务：
+                </td>
+                <td align="left" style="width:100px">
+                	<select name="couponBusinessType"  style="width: 130px">
+                		<option  value="">--请选择--</option>
+						<option  #if($!resultMap.tbCouponPromoQuery.couponBusinessType==1) selected="selected" #end value="1">直接发放账号</option>
+						<option  #if($!resultMap.tbCouponPromoQuery.couponBusinessType==2) selected="selected" #end value="2">用户行为相关</option>
+						<option  #if($!resultMap.tbCouponPromoQuery.couponBusinessType==3) selected="selected" #end value="3">通过链接领取</option>
+					</select>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	优惠券券类型：
+                </td>
+                <td align="left" style="width:400px">
+                	<select id="couponType" name="couponType"  style="width: 130px">
+                		<option  value="">--请选择--</option>
+						<option #if($!resultMap.tbCouponPromoQuery.couponType==0) selected="selected" #end value="0">满减券</option>
+						<option #if($!resultMap.tbCouponPromoQuery.couponType==1) selected="selected" #end value="1">直减券</option>
+						<!-- <option #if($!resultMap.tbCouponPromoQuery.couponType==2) selected="selected" #end value="2">免运费券</option> -->
+					</select>
+				</td>
+				<td align="right" style="width:100px">
+                	申请人：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text" id="applyUserName" name="applyUserName" value="$!resultMap.tbCouponPromoQuery.applyUserName" />
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	申请时间：
+                </td>
+                <td align="left" style="width:400px">
+                	<input type="text"  name="applyTimeStart" value="$!{dateFormatUtils.format($!resultMap.tbCouponPromoQuery.applyTimeStart)}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />至
+                	<input type="text"  name="applyTimeEnd" value="$!{dateFormatUtils.format($!resultMap.tbCouponPromoQuery.applyTimeEnd)}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+				</td>
+				<td align="right" style="width:100px">
+                	活动有效时间：
+                </td>
+                <td align="left" style="width:400px">
+                	<input type="text" name="couponValidStarttime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!resultMap.tbCouponPromoQuery.couponValidStarttime,'yyyy-MM-dd')}" />至
+                    <input type="text" name="couponValidEndtime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!resultMap.tbCouponPromoQuery.couponValidEndtime,'yyyy-MM-dd')}" />
+					<input type="button" value="查询" id="query1"/>
+				</td>
+            </tr>
+        </table>
+    </div>
+    </form>
+    <!--查询区结束--> 
+    <div class="panel_grid">
+        <table>
+            <tr>
+                <th>活动编号</th>
+                <th>发放业务类型</th>
+                <th>优惠券类型</th>
+                <th>总数量</th>
+                <th>已发放数量</th>
+                <th>已使用</th>
+                <th>已过期</th>
+                <th>申请人</th>
+                <th>部门</th>
+            </tr>
+           #foreach($coupon in $resultMap.tbCouponPromoList)
+			<tr>
+			   	<td>$!coupon.couponPromoCode</td>
+                <td>
+	                #if($!coupon.couponBusinessType==1)
+                			直接发放账号
+                	#end
+                	#if($!coupon.couponBusinessType==2)
+                			用户行为相关
+                	#end
+                	#if($!coupon.couponBusinessType==3)
+                			通过链接领取
+                	#end
+	            </td>
+                <td>
+	                #if($!coupon.couponType==0)
+                			满减券$!coupon.orderQuota-$!coupon.couponAmount
+                	#end
+                	#if($!coupon.couponType==1)
+                			直减券$!coupon.couponAmount
+                	#end
+                	#if($!coupon.couponType==2)
+                			免运费券
+                	#end
+	            </td>
+                <td>$!coupon.couponApplyAmount</td>
+	            <td>$!coupon.couponGrantAmount</td>
+                <td>$!coupon.couponUsedAmount</td> 
+                <td>$!coupon.couponExpiredAmount</td>
+                <td>$!coupon.applyUserName</td>
+                <td>$!coupon.applyDepartmentName</td>
+            </tr>
+            #end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">                      																					
+        #set($pageModule = $mainModule.getTarget("/coupon/statistics").addQueryData("couponBusinessType",$resultMap.tbCouponPromoQuery.couponBusinessType).addQueryData("couponType",$resultMap.tbCouponPromoQuery.couponType).addQueryData("applyUserName",$!resultMap.tbCouponPromoQuery.applyUserName).addQueryData("applyTimeStart",$!{dateFormatUtils.format($resultMap.tbCouponPromoQuery.applyTimeStart)}).addQueryData("applyTimeEnd",$!{dateFormatUtils.format($resultMap.tbCouponPromoQuery.applyTimeEnd)}).addQueryData("promoStarttime",$!{dateFormatUtils.format($resultMap.tbCouponPromoQuery.promoStarttime)}).addQueryData("promoEndtime",$!{dateFormatUtils.format($resultMap.tbCouponPromoQuery.promoEndtime)}))
+		#showPage($pageModule $resultMap.tbCouponPromoList)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+ </body>
+</html>

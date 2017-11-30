@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="IndexPromItem" >
+  <resultMap id="IndexPromItemResult" class="com.atu.erp.domain.IndexPromItem" >
+    <result column="id" property="id"  />
+    <result column="prom_type" property="promType" />
+    <result column="prom_name" property="promName" jdbcType="VARCHAR" />
+    <result column="prom_intro" property="promIntro" jdbcType="VARCHAR" />
+    <result column="prom_url" property="promUrl"  jdbcType="VARCHAR" />
+    <result column="sku_id" property="skuId"  />
+    <result column="prom_img_url" property="promImgUrl"  jdbcType="VARCHAR" />
+    <result column="item_id" property="itemId"  />
+    <result column="sort_num" property="sortNum"  />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="yn" property="yn"  />
+  </resultMap>
+  
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+        id = #id#
+      </isNotNull>
+      <isNotNull prepend="and" property="promUrl" >
+        prom_url = #promUrl#
+      </isNotNull>
+      <isNotNull prepend="and" property="promName" >
+        prom_name = #promName#
+      </isNotNull>
+      <isNotNull prepend="and" property="promImgUrl" >
+        prom_img_url = #promImgUrl#
+      </isNotNull>
+       <isNotNull prepend="and" property="sortNum" >
+        sort_num = #sortNum#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn#
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="IndexPromItemResult" parameterClass="java.lang.Integer" >
+    select id,prom_type,prom_name,prom_intro,prom_url,sku_id,prom_img_url,item_id,sort_num,created,modified,yn 
+    from index_prom_item
+    where id = #id#
+  </select>
+  
+
+  <insert id="insert" parameterClass="com.atu.erp.domain.IndexPromItem" >
+    insert into index_prom_item (prom_type,prom_name,prom_intro,prom_url,sku_id,prom_img_url,item_id,sort_num,created,modified,yn)
+    values (#promType#,#promName#,#promIntro#,#promUrl#,#skuId#,#promImgUrl#,#itemId#,#sortNum#,now(),now(),#yn#) 
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			<![CDATA[SELECT @@IDENTITY AS id ]]>
+	  </selectKey>
+  </insert>
+
+	<update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.IndexPromItem" >
+    update index_prom_item set MODIFIED = now()
+    <dynamic >
+      <isNotNull prepend="," property="promType" >
+        prom_type = #promType#
+      </isNotNull>
+      <isNotNull prepend="," property="promName" >
+        prom_name = #promName#
+      </isNotNull>
+      <isNotNull prepend="," property="promIntro" >
+        prom_intro = #promIntro#
+      </isNotNull>
+      <isNotNull prepend="," property="promUrl" >
+        prom_url = #promUrl#
+      </isNotNull>
+      <isNotNull prepend="," property="sortNum" >
+        sort_num = #sortNum#
+      </isNotNull>
+      <isNotNull prepend="," property="skuId" >
+        sku_id = #skuId#
+      </isNotNull>
+      <isNotNull prepend="," property="promImgUrl" >
+        prom_img_url = #promImgUrl#
+      </isNotNull>
+      <isNotNull prepend="," property="itemId" >
+        item_id = #itemId#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="yn" >
+        yn = #yn#
+      </isNotNull>
+    </dynamic>
+    where id = #id#
+  </update>
+  
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.IndexPromItemQuery" resultClass="java.lang.Integer" >
+    select count(1) from index_prom_item
+    <include refid="IndexPromItem.condition" />
+  </select>
+  
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.IndexPromItemQuery" resultMap="IndexPromItemResult" >
+    select id,prom_type,prom_name,prom_intro,prom_url,sku_id,prom_img_url,item_id,sort_num,created,modified,yn
+    from index_prom_item
+    <include refid="IndexPromItem.condition" />
+    order by id desc
+  </select>
+  
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.IndexPromItemQuery" resultMap="IndexPromItemResult" >
+   select id,prom_type,prom_name,prom_intro,prom_url,sku_id,prom_img_url,item_id,sort_num,created,modified,yn
+    from index_prom_item
+    <include refid="IndexPromItem.condition" />
+    order by id desc
+  	limit #start#,#pageSize#
+  </select>
+  
+</sqlMap>

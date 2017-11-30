@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>经营概况</title>
+        
+        <link type="text/css" rel="stylesheet" href="/misc/css/admin.css"/>
+        <link type="text/css" rel="stylesheet" href="/misc/css/survey.css"/>
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="$assetModule.getTarget("/js/coupon/coupon.js")"></script>
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">经营概况</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <br/>
+    <!--展示区开始-->
+    <div class="panel_search">
+    	<div class="panel">
+			<div class="panel1">
+				<span><img src="/img/survey/icon1.png" /></span>
+				<span>流量</span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="各页面被用户访问的次数。用户多次打开或刷新同一个页面，浏览量累加。"/> PV</span>
+				<span>$!riskStatPvuvOrders.pv</span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="各页面的访问人数。00:00-24:00内，同一访客多次访问只被计算一次。"/> UV</span>
+				<span>$!riskStatPvuvOrders.uv</span>
+			</div>
+		</div>
+		<div class="panel panels">
+			<div class="panel1">
+				<span><img src="/img/survey/icon2.png" /></span>
+				<span>销量</span>
+			</div>
+			<div class="panel2">
+				<p><span><img src="/img/survey/icon.png" title="统计时间内(按天、周、月统计)用户付款的总金额，包括先款订单的金额(在线支付)和先货订单的金额(货到付款)。"/> 下单金额</span>
+				<span>$!riskStatPvuvOrders.orderMoney</span></p>
+				<p><span><img src="/img/survey/icon.png" title="统计时间内(按天、周、月统计)付款的用户数量，包括先款订单的用户数量 (在线支付)和先货订单的用户数量(货到付款)。所选时间段内同一用户发生多笔成交会进行去重计算。"/> 客单量</span>
+				<span>$!riskStatPvuvOrders.guestUnitMoney</span></p>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="统计时间内(按天、周、月统计)付款的用户数量，包括先款订单的用户数量 (在线支付)和先货订单的用户数量(货到付款)。所选时间段内同一用户发生多笔成交会进行去重计算。"/> 下单客户数</span>
+				<span>$!riskStatPvuvOrders.orderConsumer</span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="统计时间内(按天、周、月统计)用户付款的总订单量，包括先款订单量(在线支付)和先货订单量(货到付款)。"/> 下单单量</span>
+				<span>$!riskStatPvuvOrders.orderNumber</span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="统计时间内(按天、周、月统计)用户付款的商品总件数，包括先款订单的商品件数 (在线支付)和先货订单的商品件数(货到付款)。"/> 下单商品件数</span>
+				<span>$!riskStatPvuvOrders.itemCount</span>
+			</div>
+		</div>
+		<div class="panel">
+			<div class="panel1">
+				<span><img src="/img/survey/icon1.png" /></span>
+				<span>转化</span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="下单客户数/访客数。"/> 转化率</span>
+				<span>$!riskStatPvuvOrders.conversionRate%</span>
+			</div>
+			<!-- <div class="panel2">
+				<span><img src="/img/survey/icon.png" title="各页面的访问人数。00:00-24:00内，同一访客多次访问只被计算一次。"/> 先款付款率</span>
+				<span>77,567</span>
+			</div>  -->
+			
+		</div>
+    </div>
+    <!--展示区结束	-->
+</div>   
+<!--盒子结束--> 
+</body>
+</html>

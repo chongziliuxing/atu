@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>结算管理页面</title>
+        
+		<link type="text/css" rel="stylesheet" href="/misc/css/admin.css" />
+		<link type='text/css' rel="stylesheet" href='/misc/css/basic1.css'/>
+		<link rel="stylesheet" href="/css/tab.css" type="text/css" />
+		
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="/js/jquery.simplemodal.js"></script>
+		<script language="javascript" src="/My97DatePicker/WdatePicker.js"></script> 
+		
+</head>
+<body>
+<!--盒子开始-->
+<form id="f1" name="f1" method="get" onsubmit="return checkSubmit();">
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">结算管理</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	商家编号：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text" id="venderUserId" name="venderUserId"  value="$!query.venderUserId" />
+				</td>
+				<td align="right" style="width:100px">
+                	起止时间：
+                </td>
+                <td align="left" style="width:300px">
+                	<input type="text" id="startTime" name="startTime" value="$!{dateFormatUtils.format($!query.startTime,'yyyy-MM-dd')}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />至
+                	<input type="text" id="endTime" name="endTime" value="$!{dateFormatUtils.format($!query.endTime,'yyyy-MM-dd')}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	结算状态：
+                </td>
+                <td align="left" style="width:100px">
+					<select name="balanceStatus" id="balanceStatus" style="width: 130px">
+						<option value="">全部</option>
+						<option #if($!query.balanceStatus==1) selected="selected" #end value="1">待审核</option>
+						<option #if($!query.balanceStatus==2) selected="selected" #end value="2">审核通过</option>
+						<option #if($!query.balanceStatus==3) selected="selected" #end value="3">审核驳回</option>
+						<option #if($!query.balanceStatus==4) selected="selected" #end value="4">结算完成</option>
+						<option #if($!query.balanceStatus==5) selected="selected" #end value="5">冻结</option>
+						<option #if($!query.balanceStatus==6) selected="selected" #end value="6">商家已确认</option>
+					</select>
+				</td>
+				<td align="right" style="width:100px"></td>
+                <td align="left" style="width:100px">
+                	<input type="submit" value="查询" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="doExcel();" value="导出查询结果" />
+                </td>
+            </tr>
+        </table>
+    </div><br />
+    <!--查询区结束--> 
+    <!--列表区开始-->
+    <div class="panel_grid">
+        <table>
+            <tr>
+                <th>结算单号</th>
+                <th>商家编号</th>
+                <!-- <th>起止时间</th>  -->
+                <th>货款</th>
+                <th>本期应付</th>
+                <th>应结金额</th>
+                <th>实结金额</th>
+                <th>结算状态</th>
+                <th>付款日期</th>
+                <th>银行流水单号</th>
+				<th>操作</th>
+            </tr>
+            #foreach($!balanceInfo in $!list)
+			<tr>
+                <td>$!balanceInfo.balanceId</td>
+                <td>
+                	$!balanceInfo.venderUserId
+                </td>
+                <!-- <td>
+                    $!{dateFormatUtils.format($balanceInfo.balanceDateStart, "yyyy-MM-dd")}至
+                	$!{dateFormatUtils.format($balanceInfo.balanceDateEnd, "yyyy-MM-dd")}
+                </td> -->
+                <td>
+                	$!balanceInfo.paymentGoods
+                </td>
+ 
+                <td>
+                	$!{balanceInfo.oughtPayMoney}
+                </td> 
+                <td>
+                    $!balanceInfo.balanceMoney
+                	
+                </td> 
+                <td>
+                	$!{balanceInfo.balanceMoneyFact}
+                </td>
+                <td>
+                     #if(${balanceInfo.balanceStatus}==1)
+                		待商家确认
+                	#end
+                	#if(${balanceInfo.balanceStatus}==2)
+                		审核通过
+                	#end
+                	#if(${balanceInfo.balanceStatus}==3)
+                		审核驳回
+                	#end
+                	#if(${balanceInfo.balanceStatus}==4)
+                		结算完成
+                	#end
+                	#if(${balanceInfo.balanceStatus}==5)
+                		【冻结】<input type="button" value="解除冻结" onclick="doFree($!balanceInfo.balanceId);" />
+                	#end
+					#if($!balanceInfo.balanceStatus == 6)
+						<input type="button" value="审核" onclick="showDoAgree($!balanceInfo.balanceId);"/>
+					#end
+                </td>
+                <td>
+                	$!{dateFormatUtils.format($balanceInfo.payDate, "yyyy-MM-dd")}
+                </td>
+                <td>
+                	$!balanceInfo.bankNumber
+                </td>
+				<td>
+					<a href="javascript:void(0);" onclick="seeBalance($!balanceInfo.balanceId)">查看结算单</a><br/>
+				</td>
+            </tr>
+            #end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">
+        #set($pageModule = $mainModule.getTarget("/balanceInfo/index").addQueryData("balanceStatus",$!{query.balanceStatus}).addQueryData("venderUserId",$!{query.venderUserId}).addQueryData("startTime",$!{dateFormatUtils.format($!query.startTime)}).addQueryData("endTime",$!{dateFormatUtils.format($!query.endTime)}).addQueryData("pageSize",$!query.pageSize).addQueryData("venderUserShopName",$!query.venderUserShopName).addQueryData("balanceId",$!query.balanceId))
+		#showPage($pageModule $list)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+</form>
+<div id="addDialog" style="width:95%; display:none;">
+</div>
+
+<script type="text/javascript">
+    function showSimpleModel(){
+        $('.simplemodal-container').show();
+	    $('.simplemodal-overlay').show();
+    }
+    function changeSimpleModelCss(width,height,top){
+        $("#simplemodal-container").css("width",width+"px");
+		$("#simplemodal-container").css("height",height+"px");
+		if(top){
+		$("#simplemodal-container").css("top",top+"px");
+		}
+		$('.simplemodal-close').css("margin-top","20px");
+	    $('.simplemodal-close').css("margin-right","20px");
+    }
+
+	function detail(balanceId){
+		showSimpleModel();
+	  jQuery.get("/balanceInfo/detail?balanceId="+balanceId, function(result){
+        $("#addDialog").html(result);
+      });
+  
+		$('#addDialog').modal({
+		});
+		changeSimpleModelCss(750,430,20);
+		return;
+	};
+	
+	function seeBalance(balanceId){
+		showSimpleModel();
+	    jQuery.get("/balanceInfo/seeBalance?balanceId="+balanceId, function(result){
+          $("#addDialog").html(result);
+        });
+  
+		$('#addDialog').modal({
+		});
+		changeSimpleModelCss(750,430,20);
+		return;
+	};
+	function showDoAgree(balanceId){
+	    showSimpleModel();
+	    $("#balanceId").val(balanceId);
+        $("#addDialog").html($("#agreeDiv").html());
+		$('#addDialog').modal({});
+          changeSimpleModelCss(360,230,20);
+		return;
+	}
+	function doFree(balanceId){
+	    var balanceStatus=1;
+		if(confirm("确认修改审核状态？")){
+			$.ajax({
+				type : "post",
+		    	url : "/balanceInfo/doAgree",
+		    	data : "balanceId="+balanceId+"&balanceStatus="+balanceStatus,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("修改成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	
+	function doAgree(){
+	    var balanceId=$("#balanceId").val();
+	    var balanceStatus=$("input[name=agreeBalanceStatus]:checked").val();
+	    if(!balanceStatus){
+	      alert("请选择审核状态");
+	      return ;
+	    }
+		if(confirm("确认修改审核状态？")){
+			$.ajax({
+				type : "post",
+		    	url : "/balanceInfo/doAgree",
+		    	data : "balanceId="+balanceId+"&balanceStatus="+balanceStatus,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("修改成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	
+	function checkSubmit(){
+      var venderUserId=$("#venderUserId").val();
+       if(isNaN(venderUserId)){
+         alert("商家编号只能为数字！");
+         $("#venderUserId").val("");
+         return false;
+       }
+       return true;
+     }
+	
+	function doExcel(){
+		window.location.href="/balanceInfo/excel?balanceStatus="+$("#balanceStatus").val()+"&startTime="+$("#startTime").val()+"&endTime="+$("#endTime").val()+"&venderUserId="+$("#venderUserId").val();
+	}
+	function doExcelDetailOrderList(){
+        var balanceId=$("#detailOrderListFrame0").contents().find("#balanceId").val();
+		window.location.href="/orderInfo/excelOrderListForBalance?orderStatus=50&balanceId="+balanceId;
+	}
+
+</script>
+ </body>
+</html>

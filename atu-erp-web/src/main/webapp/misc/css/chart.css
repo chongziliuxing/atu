@@ -1,0 +1,47 @@
+*{font-size:12px;}
+html{border:0;width:100%;}
+body{font-family:"宋体",Arail,verdana;font-size:14px;line-height:2.5em;color:#444;background:#fff;margin:0 auto;}
+
+.panel_search{
+	margin-top: 10px;
+}
+.panel{
+	height: 32px;
+	line-height: 32px;
+    color: #05539b;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top:10px;
+}
+.panel div{
+	float: left;
+	height: 100%;
+	border: 1px solid #b3d8ea;
+}
+.panel div img{
+	vertical-align: middle;
+}
+.panel span:FIRST-CHILD{
+	float: left;
+	margin-left: 10px;
+}
+.panel span:LAST-CHILD{
+	float: right;
+	margin-right: 15px;
+}
+.panel1{
+	width: 100px;
+	text-align: center;
+	border: 1px solid #b3d8ea;
+}
+.panel2{
+	width: 240px;
+	text-align: center;
+}
+.panel3 span{
+	float: left;
+	width: 100px;
+	text-align: center;
+}
+

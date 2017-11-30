@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>申请优惠券</title>
+        
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="$assetModule.getTarget("/js/coupon/coupon.js")"></script>
+		<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script> 
+		<link type="text/css" rel="stylesheet" href="/misc/css/coupon.css"/>
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">优惠券申请(经理级别以上的员工可以申请)</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    <form id="f1">
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="10">
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	申请人：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text" id="applyUserName" name="applyUserName" />
+				</td>
+                <td align="right" style="width:100px">
+                	申请部门：
+                </td>
+                <td align="left" style="width:100px">
+					<select style="width: 130px">
+						<option>市场部</option>
+					</select>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	发放业务类型：
+                </td>
+                <td align="left" style="width:100px">
+                	<select name="couponBusinessType" id="couponBusinessType" style="width: 130px">
+						<option  value="1">直接发放账号</option>
+						<option  value="2">用户行为相关</option>
+						<option  value="3">通过链接领取</option>
+					</select>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	活动名称：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text" id="couponPromoName" name="couponPromoName" />
+				</td>
+				<td align="right" style="width:100px">
+                	费用归属：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="radio" name="applyDepartmentName" checked="checked" />申请部门
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	优惠券类型：
+                </td>
+				<td align="left" style="width:100px">
+                	<input type="radio"  name="couponType"  value="0" checked="checked" onclick="getCouponType(this)" />满减券
+                	<input type="radio"  name="couponType"  value="1" onclick="getCouponType(this)" />直减券
+                	<!-- <input type="radio"  name="couponType"  value="2" onclick="getCouponType(this)" />免运费券 -->
+				</td>
+				<td align="right" style="width:100px">
+                	发放形式：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="radio" checked="checked" /><span id="span1">直接发放账号</span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	使用限额：
+                </td>
+				<td align="left" style="width:100px" colspan="3">
+					<span id="span2">
+						订单金额大于等于<input type='text' id='orderQuota' name='orderQuota' style='width:30px' />元,
+				                     减<input type='text' id='couponAmount' name='couponAmount' style='width:30px' />元
+				    </span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	申请数量：
+                </td>
+				<td align="left" style="width:100px" colspan="3">
+                	<input type="text" id="couponApplyAmount" name="couponApplyAmount" />张
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px" >
+                	有效期类型：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<div>
+                		<input type="radio" id="couponValidType" name="couponValidType" value="0" onclick="getcouponValidType(this)" checked="checked"/>相对时间
+                		<input type="radio" id="couponValidType" name="couponValidType" value="1" onclick="getcouponValidType(this)" />开始时间为当前时间，结束自定义
+                		<!-- <input type="radio" name="couponValidType" value="2" onclick="getcouponValidType(this)" />开始时间和结束时间均自定义 -->
+                	</div>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	具体时间：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<span id="span3">
+                		有效期为<input type="text" id="couponValidDays" name="couponValidDays"  style="width:30px"/>天
+                	</span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	发放条件：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<input type="radio" checked="checked"/><span id="span4">所有注册用户</span>
+				</td>
+            </tr>
+        </table>
+        <br/><br/>
+        <div align="center">
+        	<input type="button" value="提交" id="btn1"/>
+        </div>
+    </div>
+    </form>
+    <!--查询区结束--> 
+</div>
+<!--盒子结束--> 
+ </body>
+</html>

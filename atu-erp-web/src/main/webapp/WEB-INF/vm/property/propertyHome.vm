@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>管理页面</title>
+        <link href="/style/erpstyle.css"rel="stylesheet" type="text/css" />
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+        <script language="javascript" src="/js/erpstyle1.js"></script>
+        <script language="javascript" src="/js/common.js"></script>
+    </head>
+    <body>
+
+<div class="box"><!--标题区开始-->
+    <div class="title1">
+        <div class="left">
+            <div class="title_gl">增加商品属性</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+        <div class="right">
+            <div class="zt"></span>
+        </div>
+    </div>
+</div>
+<!--标题区结束-->
+<div style="height: 10px;"></div>
+<div class="panel_search1"><!--属性编辑区开始-->
+	<form id="proForm1" name="proForm1" method="post" >
+		<input type="hidden" id="propertyType" name="propertyType" value="2"/>
+        <table>
+        	<tr>
+        		<td style="font-weight: bold; width: 100px" align="right">添加商品属性</td>
+        	</tr>
+    		<tr>
+        		<td align="right" style="width: 100px">商品分类：</td>
+        		<td align="left" style="width: 340px">
+        			<select name="categoryId" id="categoryId1" style="width: 80px" onchange="getList('categoryId1');"></select>
+        			<select name="categoryId" id="categoryId2" style="width: 80px" onchange="getList('categoryId2');"></select>
+        			<select name="categoryId" id="categoryId3" style="width: 80px" onchange="getList('categoryId3');"></select>
+        			<select name="categoryId" id="categoryId4" style="width: 80px" onchange="getList('categoryId4');"></select>
+        		</td>
+				<td align="right" style="width: 100px">商品属性：</td>
+				<td>
+					<input type="text" id="propertyName" name="propertyName" value="" style="width: 200px" />
+				</td>
+        	</tr>
+			<tr>
+				<td align="right" style="width: 100px">选择方式：</td>
+				<td align="left" style="width: 340px">
+        			<select name="ifMultiSelect" id="ifMultiSelect" style="width: 80px">
+						<option value="1">单选</option>
+						<option value="2">多选</option>
+					</select>
+        		</td>
+				<td align="right" style="width: 100px">展示方式：</td>
+				<td align="left" style="width: 340px">
+        			<select name="showType" id="showType" style="width: 80px">
+						<option value="1">单选框</option>
+						<option value="2">下拉框</option>
+					</select>
+        		</td>
+			</tr>
+			<tr>
+				<td align="right" style="width: 100px">是否有子属性：</td>
+				<td align="left" style="width: 340px">
+        			<select name="subFlag" id="subFlag" style="width: 80px">
+						<option value="0">是</option>
+						<option value="1">否</option>
+					</select>
+        		</td>
+			</tr>
+        	<tr>
+        		<td align="right" style="width: 100px"></td>
+        		<td style="width: 200px"><input type="button" id="addpro1"
+        			value="添加" /></td>
+        	</tr>
+        </table>
+	</form>
+</div><!--查询区结束-->
+<div class="panel_search1"><!--查询区开始-->
+    <table style="border-collapse: collapse;" id="propertyTH">
+    	<tr>
+    		<td style="font-weight: bold;" align="left" colspan="8">商品属性列表
+    		</td>
+    	</tr>
+    </table>
+    <table style="border-collapse: collapse;" id="proTab_categoryId1">
+    </table>
+</div><!--查询区结束-->
+
+
+<br />
+<input type="hidden" id="ifHaveProperty" name="ifHaveProperty" value="" />
+<input type="hidden" id="propertyId" name="propertyId" value="" />
+<!--盒子结束-->
+<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script>
+<script language="javascript" src="$assetModule.getTarget("/js/property/propertyJS.js")"></script>
+
+<script langusge="javascript">
+$(document).ready(function(){
+	//获取一级分类
+	jQuery.ajax( {
+		url : "/category/getLevel",
+		type : "post",
+		dataType : "json",
+		data : "level=1",
+		success : function(data) {
+			if (data.msg == "success") {
+				$("#categoryId1").empty(); // 清空分类选项
+				var categoryList=data.categoryList;
+				for ( var i = 0; i < categoryList.length; i++) {
+					var category = categoryList[i];
+					$("<option value='" + category.categoryId + "'>" 
+					+ category.categoryName + "</option>").appendTo("#categoryId1");
+				}
+				//获取二级分类
+				$("#categoryId1").change();
+			} else {
+				alert("无商品一级分类！");
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+	
+	getList("categoryId1");
+	getList("categoryId2");
+	getList("categoryId3");
+	getList("categoryId4");
+});
+
+function checkBrandName(){
+	var brandName = $("#brandName").val();
+	if(brandName == ""){
+		alert("请输入品牌名称");
+		$("#brandName").focus();
+		return false;
+	}
+	return true;
+}
+
+
+function getList(categoryTagId) {
+	var categoryId = document.getElementById(categoryTagId).value;
+	jQuery.ajax( {
+		url : "/property/listPro",
+		type : "post",
+		dataType : "json",
+		data : "categoryId=" + categoryId + "&propertyType=2",
+		success : function(data) {
+			if (data.msg == "success") {
+				$("#proTab_" + categoryTagId).empty();
+				var propertyList = data.propertyList
+				$("#proTab_" + categoryTagId).append(
+					"<tr style='font-weight:bold;'>" +
+    					"<th class='tdgoods' style='width: 100px'>商品属性名称</th>" +
+						"<th class='tdgoods' style='width: 100px'>选择方式</th>" +
+						"<th class='tdgoods' style='width: 100px'>展示方式</th>" +
+						"<th class='tdgoods' style='width: 100px'>是否有子属性</th>" +
+    					"<th class='tdgoods' style='width: 100px'>操作</th>" +
+					"</tr>"
+				);
+				for(var i=0; i<propertyList.length; i++) {
+					var property = propertyList[i];
+					var multiSelect = "";
+					var showType = "";
+					var subFlag = "";
+					if(property.ifMultiSelect == "1") {
+						multiSelect = "单选";
+					}
+					if(property.ifMultiSelect == "2") {
+						multiSelect = "多选";
+					}
+					if(property.showType == "1") {
+						showType = "单选框";
+					} 
+					if(property.showType == "2") {
+						showType = "下拉框";
+					}
+					if(property.subFlag == "1") {
+						subFlag = "是";
+					} else {
+						subFlag = "否";
+					}
+					$("#proTab_" + categoryTagId).append(
+						"<tr>" +
+    						"<td class='tdgoods' style='width: 100px'>"+ property.propertyName +"</td>" +
+							"<td class='tdgoods' style='width: 100px'>"+ multiSelect +"</td>" +
+							"<td class='tdgoods' style='width: 100px'>"+ showType +"</td>" +
+							"<td class='tdgoods' style='width: 100px'>"+ subFlag +"</td>" +
+    						"<td class='tdgoods' style='width: 100px'>" +
+    							"<a id='' href=''>删除</a>&nbsp;&nbsp;" +
+								"<a id='' href='/property/subHome?propertyId=" + property.propertyId + "'>添加子属性</a>" +
+    						"</td>" +
+						"</tr>"
+					);
+				}
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+}
+
+$("#addpro1").click(function() {
+	jQuery.ajax( {
+		url : "/property/addPro",
+		type : "post",
+		dataType : "json",
+		data : $("#proForm1").serialize(),
+		success : function(data) {
+			if (data.msg == "success") {
+    			getList("categoryId1");
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+});
+
+$("#addpro2").click(function() {
+	jQuery.ajax( {
+		url : "/property/addPro",
+		type : "post",
+		dataType : "json",
+		data : $("#proForm2").serialize(),
+		success : function(data) {
+			if (data.msg == "success") {
+    			getList("categoryId2");
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+});
+
+$("#addpro3").click(function() {
+	jQuery.ajax( {
+		url : "/property/addPro",
+		type : "post",
+		dataType : "json",
+		data : $("#proForm3").serialize(),
+		success : function(data) {
+			if (data.msg == "success") {
+    			getList("categoryId3");
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+});
+
+$("#addpro4").click(function() {
+	jQuery.ajax( {
+		url : "/property/addPro",
+		type : "post",
+		dataType : "json",
+		data : $("#proForm4").serialize(),
+		success : function(data) {
+			if (data.msg == "success") {
+    			getList("categoryId4");
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+});
+</script>
+</body>
+</html>

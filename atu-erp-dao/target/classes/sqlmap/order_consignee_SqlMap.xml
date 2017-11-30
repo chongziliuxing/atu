@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="OrderConsignee" >
+  <resultMap id="OrderConsigneeResult" class="com.atu.erp.domain.OrderConsignee" >
+    <result column="id" property="id"  />
+    <result column="user_id" property="userId"  />
+    <result column="vender_user_id" property="venderUserId"  />
+    <result column="order_id" property="orderId"  />
+    <result column="buy_num" property="buyNum"  />
+    <result column="buy_money" property="buyMoney"  />
+    <result column="consignee_name" property="consigneeName" jdbcType="VARCHAR" />
+    <result column="consignee_province" property="consigneeProvince"  />
+    <result column="consignee_city" property="consigneeCity"  />
+    <result column="consignee_county" property="consigneeCounty"  />
+    <result column="consignee_address" property="consigneeAddress" jdbcType="VARCHAR" />
+    <result column="consignee_mobile" property="consigneeMobile" jdbcType="VARCHAR" />
+    <result column="express" property="express" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+    <result column="yn" property="yn" />
+  </resultMap>
+  
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="userId" >
+        user_id = #userId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="venderUserId" >
+        vender_user_id = #venderUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="orderId" >
+        order_id = #orderId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+  
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.OrderConsigneeQuery" resultMap="OrderConsigneeResult" >
+    select id, user_id, vender_user_id, order_id, buy_num, buy_money, consignee_name, consignee_province, consignee_city, 
+      consignee_county, consignee_address, consignee_mobile,express, created, modified, yn
+    from order_consignee
+    <include refid="OrderConsignee.condition" />
+  </select>
+  
+  <insert id="insert" parameterClass="com.atu.erp.domain.OrderConsignee" >
+    insert into order_consignee (user_id, vender_user_id, order_id, buy_num, buy_money, consignee_name, 
+      consignee_province, consignee_city, consignee_county, consignee_address, consignee_mobile,express, created, modified)
+    values (#userId:INTEGER#, #venderUserId:INTEGER#, #orderId:INTEGER#, #buyNum:INTEGER#, #buyMoney:INTEGER#, 
+      #consigneeName:VARCHAR#, #consigneeProvince:INTEGER#, #consigneeCity:INTEGER#, #consigneeCounty:INTEGER#,
+      #consigneeAddress:VARCHAR#, #consigneeMobile:VARCHAR#,#express:VARCHAR#, now(), now())
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			<![CDATA[SELECT @@IDENTITY AS id ]]>
+	  </selectKey>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.OrderConsignee" >
+    update order_consignee set MODIFIED = now()
+    <dynamic>
+      <isNotNull prepend="," property="express" >
+        express = #express:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        order_id = #orderId:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where id = #id:INTEGER#
+  </update>
+</sqlMap>

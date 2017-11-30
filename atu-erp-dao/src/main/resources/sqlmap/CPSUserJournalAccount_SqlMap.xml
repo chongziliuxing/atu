@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CPSUserJournalAccount" >
+  <resultMap id="CPSUserJournalAccountResult" class="com.atu.erp.domain.CPSUserJournalAccount" >
+    <result column="ID" property="id"  />
+    <result column="USER_ID" property="userId" />
+    <result column="CPS_USER_ID" property="cpsUserId" />
+    <result column="AMOUNT_PLUS" property="amountPlus"/>
+    <result column="OPERATE_TIME" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="OPERATE_TYPE" property="operateType" />
+    <result column="CAUSE" property="cause" jdbcType="VARCHAR"/>
+    <result column="AMOUNT_MINUS" property="amountMinus" />
+    <result column="AMOUNT_REMAIN" property="amountRemain"/>
+    <result column="OPERATE_ID"  property="operateId"/>
+  </resultMap>
+
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+        ID = #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="userId" >
+        USER_ID = #userId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="amountPlus" >
+        AMOUNT_PLUS = #amountPlus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="operateTime" >
+        OPERATE_TIME = #operateTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="and" property="operateType" >
+        OPERATE_TYPE = #operateType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="cause" >
+        CAUSE = #cause:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="and" property="amountMinus" >
+        AMOUNT_MINUS = #amountMinus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="amountRemain" >
+        AMOUNT_REMAIN = #amountRemain:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="operateId" >
+        OPERATE_ID = #operateId:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="CPSUserJournalAccountResult" parameterClass="java.lang.Integer" >
+    select ID,USER_ID,CPS_USER_ID,AMOUNT_PLUS,OPERATE_TIME,OPERATE_TYPE,CAUSE,AMOUNT_MINUS,AMOUNT_REMAIN,OPERATE_ID
+    from CPS_USER_JOURNAL_ACCOUNT
+    where ID = #id:INTEGER#
+  </select>
+  
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.CPSUserJournalAccount" >
+    insert into CPS_USER_JOURNAL_ACCOUNT(USER_ID,CPS_USER_ID,AMOUNT_PLUS,OPERATE_TIME,OPERATE_TYPE,CAUSE,AMOUNT_MINUS,AMOUNT_REMAIN,OPERATE_ID)
+    values (#userId:INTEGER#,#cpsUserId:INTEGER#,#amountPlus:INTEGER#,now(),#operateType:INTEGER#,#cause:VARCHAR#,#amountMinus:INTEGER#,#amountRemain:INTEGER#,#operateId:INTEGER#)
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			<![CDATA[SELECT @@IDENTITY AS ID ]]>
+	  </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.CPSUserJournalAccount" >
+    update CPS_USER_JOURNAL_ACCOUNT
+    <dynamic prepend="set">
+      <isNotNull prepend="," property="userId" >
+        USER_ID = #userId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="amountPlus" >
+        AMOUNT_PLUS = #amountPlus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="operateType" >
+        OPERATE_TYPE = #operateType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="cause" >
+        CAUSE = #cause:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="amountMinus" >
+        AMOUNT_MINUS = #amountMinus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="amountRemain" >
+        AMOUNT_REMAIN = #amountRemain:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="operateId" >
+        OPERATE_ID = #operateId:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:INTEGER#
+  </update>
+  
+  
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.CPSUserJournalAccountQuery" resultClass="java.lang.Integer" >
+    select count(1) from CPS_USER_JOURNAL_ACCOUNT
+    <include refid="CPSUserJournalAccount.condition" />
+  </select>
+  
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.CPSUserJournalAccountQuery" resultMap="CPSUserJournalAccountResult" >
+    select ID,USER_ID,CPS_USER_ID,AMOUNT_PLUS,OPERATE_TIME,OPERATE_TYPE,CAUSE,AMOUNT_MINUS,AMOUNT_REMAIN,OPERATE_ID
+    from CPS_USER_JOURNAL_ACCOUNT
+    <include refid="CPSUserJournalAccount.condition" />
+  </select>
+  
+  <!-- 条件分页查询 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.CPSUserJournalAccountQuery" resultMap="CPSUserJournalAccountResult" >
+    select ID,USER_ID,CPS_USER_ID,AMOUNT_PLUS,OPERATE_TIME,OPERATE_TYPE,CAUSE,AMOUNT_MINUS,AMOUNT_REMAIN,OPERATE_ID
+    from CPS_USER_JOURNAL_ACCOUNT
+    <include refid="CPSUserJournalAccount.condition" />
+    order by ID desc
+  	limit #start#,#pageSize#
+  </select>
+  
+  <!-- 根据分销用户ID查询最近的一条记录 -->
+  <select id="selectByCpsUserId" parameterClass="com.atu.erp.domain.query.CPSUserJournalAccountQuery" resultMap="CPSUserJournalAccountResult">
+  	select ID,USER_ID,CPS_USER_ID,AMOUNT_PLUS,OPERATE_TIME,OPERATE_TYPE,CAUSE,AMOUNT_MINUS,AMOUNT_REMAIN,OPERATE_ID
+    from CPS_USER_JOURNAL_ACCOUNT
+    <include refid="CPSUserJournalAccount.condition" />
+    order by OPERATE_TIME desc LIMIT 0,1
+  </select>
+</sqlMap>

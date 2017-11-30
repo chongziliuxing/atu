@@ -1,0 +1,597 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>管理页面</title>
+        <link href="/style/erpstyle.css"rel="stylesheet" type="text/css" />
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+        <script language="javascript" src="/js/erpstyle1.js"></script>
+        <script language="javascript" src="/js/common.js"></script>
+        <script language="javascript" src="/js/jquery.simplemodal.js"></script>
+        <link type='text/css' rel="stylesheet" href='/misc/css/basic1.css'/>
+        <style type="text/css">
+.rating{
+	width:80px;
+	height:16px;
+	margin:0 0 20px 0;
+	padding:0;
+	list-style:none;
+	clear:both;
+	position:relative;
+	background: url(/img/star-matrix.gif) no-repeat 0 0;
+}
+/* add these classes to the ul to effect the change to the correct number of stars */
+.nostar {background-position:0 0}
+.onestar {background-position:0 -16px}
+.twostar {background-position:0 -32px}
+.threestar {background-position:0 -48px}
+.fourstar {background-position:0 -64px}
+.fivestar {background-position:0 -80px}
+ul.rating li {
+	cursor: pointer;
+ /*ie5 mac doesn't like it if the list is floated\*/
+	float:left;
+	/* end hide*/
+	text-indent:-999em;
+}
+ul.rating li a {
+	position:absolute;
+	left:0;
+	top:0;
+	width:16px;
+	height:16px;
+	text-decoration:none;
+	z-index: 200;
+}
+ul.rating li.one a {left:0}
+ul.rating li.two a {left:16px;}
+ul.rating li.three a {left:32px;}
+ul.rating li.four a {left:48px;}
+ul.rating li.five a {left:64px;}
+ul.rating li a:hover {
+	z-index:2;
+	width:80px;
+	height:16px;
+	overflow:hidden;
+	left:0;	
+	background: url(images/star-matrix.gif) no-repeat 0 0
+}
+ul.rating li.one a:hover {background-position:0 -96px;}
+ul.rating li.two a:hover {background-position:0 -112px;}
+ul.rating li.three a:hover {background-position:0 -128px}
+ul.rating li.four a:hover {background-position:0 -144px}
+ul.rating li.five a:hover {background-position:0 -160px}
+/* end rating code */
+h3{margin:0 0 2px 0;font-size:110%}
+        </style>
+    </head>
+    <body>
+
+<!--盒子开始-->
+<form id="f1" name="f1" action="/operation/commentList" method="post" onsubmit="return submitSearch();">
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">评价审核</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    
+    <div class="panel_search">
+        <table border="0" cellpadding="0" cellspacing="2">
+            <tr>
+                 <td align="right" style="width:100px">商品分类：</td>
+                <td width="300px"  colspan="3">
+					<select name="categoryId1" id="categoryIdS1" style="width: 80px">
+					 <option value="0">全部</option>	
+					</select>
+                    <select name="categoryId2" id="categoryIdS2" style="width: 80px">
+                    <option value="0">全部</option>	
+					</select>
+					<select name="categoryId3" id="categoryIdS3" style="width: 80px">	
+					<option value="0">全部</option>	
+					</select>
+                    <select name="categoryId4" id="categoryIdS4" style="width: 80px">
+                    <option value="0">全部</option>	
+					</select>
+                </td>
+				<td align="right" style="width:100px">
+                	评价时间：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+					<input type="text" name="modifiedStart" id="modifiedStart" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" value="$!dateFormatUtils.format($!{query.modifiedStart},"yyyy-MM-dd")" /> 至 <input type="text" name="modifiedEnd" id="modifiedEnd" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'});" value="$!dateFormatUtils.format($!{query.modifiedEnd},"yyyy-MM-dd")" />
+				</td>
+                
+            </tr>
+            <tr>
+				<td align="right" style="width:100px">
+                	商品名称：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="itemName" maxlength="30" id="itemName" value="$!{query.itemName}"/>
+				</td>
+				<td align="right" style="width:100px">
+                	商品编号：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="itemId" maxlength="30" id="itemId" value="$!{query.itemId}"/>
+				</td>
+				<td align="right" style="width:100px">
+                	用户名：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="userName" maxlength="30" id="userName" value="$!{query.userName}"/>
+				</td>
+				<td align="right" style="width:100px">
+                	订单号：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="orderId" maxlength="30" id="orderId" value="$!{query.orderId}"/>
+				</td>
+            </tr>
+			 <tr>
+			   
+                <td align="right" style="width:100px">评价等级：</td>
+                <td style="width:100px">
+                    <select name="score">
+                       <option value="" #if($query.score=='') selected #end>全部</option>
+                       <option value="1" #if($query.score=='1') selected #end>一颗星</option>
+                       <option value="2" #if($query.score=='2') selected #end>二颗星</option>
+                       <option value="3" #if($query.score=='3') selected #end>三颗星</option>
+                       <option value="4" #if($query.score=='4') selected #end>四颗星</option>
+                       <option value="5" #if($query.score=='5') selected #end>五颗星</option>
+                    </select>
+                </td>
+				 <td align="right" style="width:100px">审核状态：</td>
+				<td>
+                    <select name="status">
+                    <option value="" #if($query.status=='') selected #end>全部</option>
+                    <option value="0" #if($query.status=='0') selected #end>待审核</option>
+                    <option value="1" #if($query.status=='1') selected #end>审核通过</option>
+                    <option value="2" #if($query.status=='2') selected #end>审核不通过</option>
+                    </select>
+                </td>
+                
+                <td align="left" style="width:100px" colspan="4">
+					<input type="submit" id="query" name="query" value="查询"/>
+				</td>
+            </tr>
+			
+        </table>
+    </div>
+    <!--查询区结束--> 
+    <!--列表区开始-->
+    <div class="panel_grid">
+    <table>
+			<tr>
+			    <td align="left">
+			    <input style="float:left;" type="checkbox" id="agreeAll" onclick="checkAgreeAll();"/><span style="float:left;margin-left:10px;">全选</span>
+			    <input style="float:left;margin-left:10px;font-size:12px;" type="button" onclick="showDoAgreeAll();" value="批量审核" />
+			    </td>
+            </tr>
+           </table>
+    #foreach($item in $list)
+        <table>
+			<tr>
+			    <td style="width:20px;valign:top;" rowspan="3">
+			    #if($item.status==0)<input type="checkbox" class="checkBox" value="$item.id"/>#end
+			    #if($item.status!=0)<input type="checkbox" disabled="true"/>#end
+			    </td>
+				<td style="text-align:right;width:100px">评分：</td>
+				 <td style="text-align:left;width:15%;">
+                     <ul class="rating 
+						#if($item.score == 1)
+						onestar
+						#end
+						#if($item.score == 2)
+						twostar
+						#end
+						#if($item.score == 3)
+						threestar
+						#end
+						#if($item.score == 4)
+						fourstar
+						#end
+						#if($item.score == 5)
+						fivestar
+						#end
+						">
+						<li class="one"><a href="#" title="1颗星">1</a></li>
+						<li class="two"><a href="#" title="2颗星">2</a></li>
+						<li class="three"><a href="#" title="3颗星">3</a></li>
+						<li class="four"><a href="#" title="4颗星">4</a></li>
+						<li class="five"><a href="#" title="5颗星">5</a></li>
+					  </ul>
+
+                 </td>
+				<td style="text-align:right;width:80px">商品编号：</td><td style="text-align:left;width:150px;">&nbsp;&nbsp;$!{item.itemId}</td>
+				<td style="text-align:right;width:80px">商品名称：</td><td colspan="3" style="text-align:left">&nbsp;&nbsp;$!{item.itemName}</td>
+				<td rowspan="3" width="200px">
+				<!--<input type="radio" #if($item.deleted==0) checked #end/>正常<input type="radio" #if($item.deleted==1) checked #end/>删除-->
+				&nbsp;&nbsp;
+				#if($item.status==0)<a href="javascript:void(0);" onclick="showDoChangeCommentContent('$item.id','$item.content');" >修改评价</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showDoAgree($item.id);" >审核</a> #end
+				#if($item.status==1) <span style="font-weight:700;">审核通过</span>#end
+				#if($item.status==2) <span style="font-weight:700;">审核不通过</span>#end
+				</td>
+            </tr>
+			<tr>
+				<td style="text-align:right;width:80px;">用户名：</td><td style="text-align:left">&nbsp;&nbsp;$!{item.userName}</td>
+				<td style="text-align:right;width:80px">评论时间：</td><td style="text-align:left">&nbsp;&nbsp;$!{dateFormatUtils.format($item.created, "yyyy-MM-dd HH:mm:ss")}</td>
+				<td style="text-align:right;width:80px">ip地址：</td><td style="text-align:left">&nbsp;&nbsp;$!{item.ip}</td>
+				<td style="text-align:right;width:80px">显示状态：</td>
+				<td style="text-align:left;width:15%;">&nbsp;&nbsp;
+				  &nbsp;&nbsp;#if($item.deleted==1) 已显示 #end #if($item.deleted==0) 未显示 #end
+				</td>
+            </tr>
+            <tr>
+				<td style="text-align:right">评论内容：</td><td colspan="7" style="text-align:left">&nbsp;&nbsp;$!{item.content}</td>
+            </tr>
+        </table>
+    #end    
+        <!--分页控件开始-->
+        
+        <div class="pager">
+        #set($pageModule = $mainModule.getTarget("/operation/commentList").addQueryData("status",$!{query.status}).addQueryData("categoryId1",$!{query.categoryId1}).addQueryData("categoryId2",$!{query.categoryId2}).addQueryData("categoryId3",$!{query.categoryId3}).addQueryData("categoryId4",$!{query.categoryId4}).addQueryData("modifiedStart",$!{query.modifiedStart}).addQueryData("modifiedEnd",$!{query.modifiedEnd}).addQueryData("userName",$!{query.userName}).addQueryData("itemId",$!{query.itemId}).addQueryData("itemName",$!{query.itemName}).addQueryData("orderId",$!{query.orderId}).addQueryData("score",$!{query.score}))
+		#showPage($pageModule $list)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+</form>
+<div id="addDialog" style="width: 95%; display:none;">
+			
+</div>
+<div id="agreeAllDiv" style="display:none;">
+<table style="border:none;height:100px;width:200px;">
+<tr>
+<td align="center"><span style="font-weight:700;">批量评价审核</span></td>
+</tr>
+<tr>
+<td><input type="radio" name="agreeAllStatus" value="1"  /> 审核通过&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="agreeAllStatus" value="2"  />审核不通过</td>
+</tr>
+<tr>
+<td align="center">
+ <input type="button" value="确认批量审核" onclick="doAgreeAll();"/>&nbsp;&nbsp;<input  type="button" onclick="$('.simplemodal-container').hide();$('.simplemodal-overlay').hide();" value="取消" />
+ </td>
+</tr>
+</table>
+</div>
+<div id="agreeDiv" style="display:none;">
+<table style="border:none;height:100px;width:200px;">
+<tr>
+<td align="center"><span style="font-weight:700;">评价审核</span></td>
+</tr>
+<tr>
+<td><input type="radio" name="agreeStatus" value="1"  /> 审核通过&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="agreeStatus" value="2"  />审核不通过</td>
+</tr>
+<tr>
+<td align="center">
+<input type="hidden" id="commentId" value=""/>
+ <input type="button" value="确认" onclick="doAgree();"/>&nbsp;&nbsp;<input  type="button" onclick="$('.simplemodal-container').hide();$('.simplemodal-overlay').hide();" value="取消" />
+ </td>
+</tr>
+</table>
+</div>
+<textarea id="changeCommentContent_tmp" style="display:none"></textarea>
+<div id="changeCommentDiv" style="display:none;">
+<table style="border:none;height:120px;width:200px;">
+<tr>
+<td align="center"><span style="font-weight:700;">修改评价</span></td>
+</tr>
+<tr>
+<td>
+  <input type="hidden" id="changeCommentId" value="" />
+  <textarea cols="25" id="changeCommentContent" rows="3" onchange="$('#changeCommentContent_tmp').val(this.value);"></textarea>
+</td>
+</tr>
+<tr>
+<td  align="center">
+ <input type="button" value="确认" onclick="doChangeCommentContent();"/>&nbsp;&nbsp;<input  type="button" onclick="$('.simplemodal-container').hide();$('.simplemodal-overlay').hide();" value="取消" />
+ </td>
+</tr>
+</table>
+</div>
+ <!--  <script language="javascript" src="/My97DatePicker/WdatePicker.js"></script> -->
+ <script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script>
+ <script language="javascript" src="$assetModule.getTarget("/js/operation/operation.js")"></script>
+ <script langusge="javascript" >
+ function submitSearch(){
+  var itemId=$("#itemId").val();
+  var orderId=$("#orderId").val();
+  if(isNaN($.trim(itemId))){
+    alert("商品编号只能为数字！");
+    $("#itemId").val("");
+    return false;
+  }
+  if(isNaN($.trim(orderId))){
+    alert("订单编号只能为数字！");
+    $("#orderId").val("");
+    return false;
+  }
+  return true;
+ }
+
+ var categoryId1="$!{query.categoryId1}";
+ var categoryId2="$!{query.categoryId2}";
+ var categoryId3="$!{query.categoryId3}";
+ var categoryId4="$!{query.categoryId4}";
+   
+//初始化分类
+$(document).ready(function(){
+	jQuery.ajax( {
+		url : "/category/getLevel",
+		type : "post",
+		dataType : "json",
+		data : "level=1",
+		success : function(data) {
+			if (data.msg == "success") {
+				$("#categoryIdS1").empty(); // 清空分类选项
+				$("<option value='0'>全部</option>").appendTo("#categoryIdS1");
+				var categoryList=data.categoryList;
+				for ( var i = 0; i < categoryList.length; i++) {
+					var category = categoryList[i];
+					
+					$("<option value='" + category.categoryId + "'>" 
+							+ category.categoryName + "</option>").appendTo("#categoryIdS1");
+				
+				}
+				if(categoryId1!='0'){
+				$("#categoryIdS1 option[value='"+categoryId1+"']").attr("selected","true");
+									//获取二级分类
+				$("#categoryIdS1").change();
+				}
+			} else {
+				alert("无商品一级分类！");
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+		});
+
+	});
+
+$("#categoryIdS1").bind("change",function() {
+			$.ajax( {
+				url : "/category/getLevel",
+				type : "post",
+				dataType : "json",
+				data : "level=2&pId="+$("#categoryIdS1").val(),
+				success : function(data) {
+					if (data.msg == "success") {
+						$("#categoryIdS2").empty(); // 清空分类选项
+						$("<option value=''> 全部 </option>").appendTo("#categoryIdS2");
+						var categoryList=data.categoryList;
+						for ( var i = 0; i < categoryList.length; i++) {
+							var category = categoryList[i];
+							
+							$("<option value='" + category.categoryId + "'>" 
+									+ category.categoryName + "</option>").appendTo("#categoryIdS2");
+							
+						}
+						if(categoryId2!='0'){
+                         $("#categoryIdS2 option[value='"+categoryId2+"']").attr("selected","true");
+						  $("#categoryIdS2").change();
+						}
+
+
+					} else {
+						alert("无二级分类！");
+					}
+				},
+				errot : function() {
+					alert("系统超时！");
+				}
+		});
+});
+
+
+//二级分类联动，获取三级分类
+$("#categoryIdS2").change(
+		function() {
+			$.ajax( {
+				url : "/category/getLevel",
+				type : "post",
+				dataType : "json",
+				data : "level=3&pId="+$("#categoryIdS2").val(),
+				success : function(data) {
+					if (data.msg == "success") {
+						$("#categoryIdS3").empty(); // 清空分类选项
+						$("<option value=''> 全部 </option>").appendTo("#categoryIdS3");
+						var categoryList=data.categoryList;
+						for ( var i = 0; i < categoryList.length; i++) {
+							var category = categoryList[i];
+							
+							$("<option value='" + category.categoryId + "'>" 
+									+ category.categoryName + "</option>").appendTo("#categoryIdS3");
+							
+						}
+						if(categoryId3!='0'){
+						$("#categoryIdS3 option[value='"+categoryId3+"']").attr("selected","true");
+						//通过二级分类获取销售属性
+						$("#categoryIdS3").change();
+						}
+					} else {
+						alert("无二级分类！");
+					}
+				},
+				errot : function() {
+					alert("系统超时！");
+				}
+		});
+});
+
+//三级分类联动，获取四级分类
+$("#categoryIdS3").change(
+		function() {
+			$.ajax( {
+				url : "/category/getLevel",
+				type : "post",
+				dataType : "json",
+				data : "level=4&pId="+$("#categoryIdS3").val(),
+				success : function(data) {
+					if (data.msg == "success") {
+						$("#categoryIdS4").empty(); // 清空分类选项
+						$("<option value=''> 全部 </option>").appendTo("#categoryIdS4");
+						var categoryList=data.categoryList;
+						for ( var i = 0; i < categoryList.length; i++) {
+							var category = categoryList[i];
+							
+							$("<option value='" + category.categoryId + "'>" 
+									+ category.categoryName + "</option>").appendTo("#categoryIdS4");
+							
+						}
+						if(categoryId4!='0'){
+                        $("#categoryIdS4 option[value='"+categoryId4+"']").attr("selected","true");
+                        }
+					} else {
+						alert("无二级分类！");
+					}
+				},
+				errot : function() {
+					alert("系统超时！");
+				}
+		});
+});
+
+
+    function showSimpleModel(){
+        $('.simplemodal-container').show();
+	    $('.simplemodal-overlay').show();
+    }
+    function changeSimpleModelCss(width,height,top){
+        $("#simplemodal-container").css("width",width+"px");
+		$("#simplemodal-container").css("height",height+"px");
+		$("#simplemodal-container").css("top",top+"px");
+    }
+	 function checkAgreeAll(){
+     var checked=$("#agreeAll").attr("checked");
+      if(checked=="checked"){
+        $(".checkBox").attr("checked",true);
+      }else {
+        $(".checkBox").attr("checked",false);
+      }
+    }
+    function showDoAgreeAll(){
+         var hasChecked=false;
+         $(".checkBox:checked").each(function(i,obj){
+             hasChecked=true;
+         });
+         if(!hasChecked){
+          alert("请选择要批量审核的评论！");
+          return;
+         }
+    	 showSimpleModel();
+        $("#addDialog").html($("#agreeAllDiv").html());
+		$('#addDialog').modal({});
+        changeSimpleModelCss(300,160,30);
+         $("#addDialog").css("width","90%");
+    }
+	function showDoChangeCommentContent(commentId,comment){
+	    showSimpleModel();
+	    $("#changeCommentId").val(commentId);
+	    $("#changeCommentContent").text(comment);
+        $("#addDialog").html($("#changeCommentDiv").html());
+		$('#addDialog').modal({});
+        changeSimpleModelCss(300,160,30);
+         $("#addDialog").css("width","90%");
+	}
+	function showDoAgree(commentId){
+	    showSimpleModel();
+	    $("#commentId").val(commentId);
+        $("#addDialog").html($("#agreeDiv").html());
+		$('#addDialog').modal({});
+        changeSimpleModelCss(250,150,50);
+        $("#addDialog").css("width","90%");
+	}
+	function doChangeCommentContent(){
+	    var changeCommentId=$("#changeCommentId").val();
+	    var changeCommentContent=$("#changeCommentContent_tmp").val();
+		if(confirm("确认修改评价内容吗？")){
+			$.ajax({
+				type : "post",
+		    	url : "/operation/doChangeCommentContent",
+		    	data : "id="+changeCommentId+"&content="+changeCommentContent,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("修改成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	function doAgree(){
+	    var commentId=$("#commentId").val();
+	    var status=$("input[name=agreeStatus]:checked").val();
+		if(confirm("确认修改审核状态？")){
+			$.ajax({
+				type : "post",
+		    	url : "/operation/doAgree",
+		    	data : "id="+commentId+"&status="+status,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("修改成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	
+	function doAgreeAll(){
+	    var commentIdStr="";
+	    $(".checkBox:checked").each(function(){
+	        commentIdStr+=$(this).val()+",";
+	    });
+	    if(commentIdStr==""){
+	      alert("请选择要批量审核的评论！");
+	      return;
+	    }
+	    commentIdStr=commentIdStr.substring(0,commentIdStr.length-1);
+	    var status=$("input[name=agreeAllStatus]:checked").val();
+	    if(status==null){
+	      alert("请选择审核状态！");
+	      return;
+	    }
+		if(confirm("确认批量修改审核状态？")){
+			$.ajax({
+				type : "post",
+		    	url : "/operation/doAgreeAll",
+		    	data : "commentIdStr="+commentIdStr+"&status="+status,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("批量修改审核状态成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+
+	
+</script>
+</body>
+</html>

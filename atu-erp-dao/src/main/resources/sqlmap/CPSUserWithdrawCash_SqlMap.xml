@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CPSUserWithdrawCash" >
+  <resultMap id="CPSUserWithdrawCashResult" class="com.atu.erp.domain.CPSUserWithdrawCash" >
+    <result column="ID" property="id" />
+    <result column="CPS_USER_ID"  property="cpsUserId" />
+    <result column="OPENID"  property="openId" />
+    <result column="CARD_TYPE" property="cardType" />
+    <result column="BANK_ID" property="bankId"  />
+    <result column="BANK_ACCOUNT" property="bankAccount" jdbcType="VARCHAR"/>
+    <result column="WITHDRAW_AMOUNT" property="withdrawAmount"/>
+    <result column="WIDTHDRAW_TIME" property="widthdrawTime" jdbcType="TIMESTAMP"/>
+    <result column="PREDICT_TRANSFER_ACCOUNT_TIME"  property="predictTransferAccountTime" jdbcType="TIMESTAMP"/>
+    <result column="WITHDRAW_STATE" property="withdrawState"  />
+    <result column="TRANSFER_ORDER_NUMBER" property="transferOrderNumber" jdbcType="VARCHAR"/>
+    <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+  </resultMap>
+
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+        ID = #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="openId" >
+        OPENID = #openId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="cardType" >
+        CARD_TYPE = #cardType:INTEGER#
+      </isNotNull>
+       <isNotNull prepend="and" property="bankId" >
+        BANK_ID = #bankId:INTEGER#
+      </isNotNull>
+       <isNotNull prepend="and" property="bankAccount" >
+        BANK_ACCOUNT = #bankAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="withdrawAmount" >
+        WITHDRAW_AMOUNT = #withdrawAmount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="widthdrawTimeStart" >
+        <![CDATA[
+ 			WIDTHDRAW_TIME > #widthdrawTimeStart#
+		]]>
+      </isNotNull>
+      <isNotNull prepend="and" property="widthdrawTimeEnd" >
+        <![CDATA[
+ 			WIDTHDRAW_TIME < #widthdrawTimeEnd#
+		]]>
+      </isNotNull>
+      <isNotNull prepend="and" property="predictTransferAccountTime" >
+        PREDICT_TRANSFER_ACCOUNT_TIME = #predictTransferAccountTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="and" property="withdrawState" >
+        WITHDRAW_STATE = #withdrawState:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="transferOrderNumber" >
+        TRANSFER_ORDER_NUMBER = #transferOrderNumber:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="remark" >
+        REMARK = #remark:VARCHAR#
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="CPSUserWithdrawCashResult" parameterClass="java.lang.Integer" >
+    select ID,CPS_USER_ID,OPENID,CARD_TYPE,BANK_ID,BANK_ACCOUNT,WITHDRAW_AMOUNT,WIDTHDRAW_TIME,PREDICT_TRANSFER_ACCOUNT_TIME,WITHDRAW_STATE,TRANSFER_ORDER_NUMBER,REMARK
+    from CPS_USER_WITHDRAW_CASH
+    where ID = #id:INTEGER#
+  </select>
+  
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.CPSUserWithdrawCash" >
+    insert into CPS_USER_WITHDRAW_CASH(CPS_USER_ID,OPENID,CARD_TYPE,BANK_ID,BANK_ACCOUNT,WITHDRAW_AMOUNT,WIDTHDRAW_TIME,PREDICT_TRANSFER_ACCOUNT_TIME,WITHDRAW_STATE,TRANSFER_ORDER_NUMBER,REMARK)
+    values (#cpsUserId:INTEGER#,#openId:VARCHAR#,#cardType:INTEGER#,#bankId:INTEGER#,#bankAccount:VARCHAR#,#withdrawAmount:INTEGER#,now(),#predictTransferAccountTime:TIMESTAMP#,#withdrawState:INTEGER#,#transferOrderNumber:VARCHAR#,#remark:VARCHAR#)
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			<![CDATA[SELECT @@IDENTITY AS ID ]]>
+	  </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.CPSUserWithdrawCash" >
+    update CPS_USER_WITHDRAW_CASH 
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="cardType" >
+        CARD_TYPE = #cardType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="openId" >
+        OPENID = #openId:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="bankId" >
+        BANK_ID = #bankId:INTEGER#
+      </isNotNull>
+       <isNotNull prepend="," property="bankAccount" >
+        BANK_ACCOUNT = #bankAccount:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="withdrawAmount" >
+        WITHDRAW_AMOUNT = #withdrawAmount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="withdrawState" >
+        WITHDRAW_STATE = #withdrawState:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="transferOrderNumber" >
+        TRANSFER_ORDER_NUMBER = #transferOrderNumber:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="remark" >
+        REMARK = #remark:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:INTEGER#
+  </update>
+  
+  <!-- 根据ID删除 -->
+  <delete id="deleteById" parameterClass="java.lang.Integer">
+    	delete from CPS_USER_WITHDRAW_CASH where ID = #id:INTEGER#
+  </delete>
+  
+  
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.CPSUserWithdrawCashQuery" resultClass="java.lang.Integer" >
+    select count(1) from CPS_USER_WITHDRAW_CASH
+    <include refid="CPSUserWithdrawCash.condition" />
+  </select>
+  
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.CPSUserWithdrawCashQuery" resultMap="CPSUserWithdrawCashResult" >
+    select ID,CPS_USER_ID,OPENID,CARD_TYPE,BANK_ID,BANK_ACCOUNT,WITHDRAW_AMOUNT,WIDTHDRAW_TIME,PREDICT_TRANSFER_ACCOUNT_TIME,WITHDRAW_STATE,TRANSFER_ORDER_NUMBER,REMARK
+    from CPS_USER_WITHDRAW_CASH
+    <include refid="CPSUserWithdrawCash.condition" />
+  </select>
+  
+  <!-- 条件分页查询 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.CPSUserWithdrawCashQuery" resultMap="CPSUserWithdrawCashResult" >
+    select ID,CPS_USER_ID,OPENID,CARD_TYPE,BANK_ID,BANK_ACCOUNT,WITHDRAW_AMOUNT,WIDTHDRAW_TIME,PREDICT_TRANSFER_ACCOUNT_TIME,WITHDRAW_STATE,TRANSFER_ORDER_NUMBER,REMARK
+    from CPS_USER_WITHDRAW_CASH
+    <include refid="CPSUserWithdrawCash.condition" />
+    order by ID desc
+  	limit #start#,#pageSize#
+  </select>
+</sqlMap>

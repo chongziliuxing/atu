@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CPSUserBankCard" >
+  <resultMap id="CPSUserBankCardResult" class="com.atu.erp.domain.CPSUserBankCard" >
+    <result column="ID" property="id"  />
+    <result column="CPS_USER_ID" property="cpsUserId" />
+    <result column="DEPOSIT_BANK" property="depositBank" jdbcType="VARCHAR"/>
+    <result column="BANK_ACCOUNT" property="bankAccount" />
+    <result column="ID_NUMBER" property="idNumber" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+        ID = #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="depositBank" >
+        DEPOSIT_BANK = #depositBank:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="bankAccount" >
+        BANK_ACCOUNT = #bankAccount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="idNumber" >
+        ID_NUMBER = #idNumber:VARCHAR#
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="CPSUserBankCardResult" parameterClass="java.lang.Integer" >
+    select ID,CPS_USER_ID,DEPOSIT_BANK,BANK_ACCOUNT,ID_NUMBER
+    from CPS_USER_BANK_CARD
+    where ID = #id:INTEGER#
+  </select>
+  
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.CPSUserBankCard" >
+    insert into CPS_USER_BANK_CARD(CPS_USER_ID,DEPOSIT_BANK,BANK_ACCOUNT,ID_NUMBER)
+    values (#cpsUserId:INTEGER#,#depositBank:VARCHAR#,#bankAccount:INTEGER#,#idNumber:VARCHAR#)
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			<![CDATA[SELECT @@IDENTITY AS ID ]]>
+	  </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.CPSUserBankCard" >
+    update CPS_USER_BANK_CARD
+    <dynamic prepend="set">
+      <isNotNull prepend="," property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="depositBank" >
+        DEPOSIT_BANK = #depositBank:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="bankAccount" >
+        BANK_ACCOUNT = #bankAccount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="idNumber" >
+        ID_NUMBER = #idNumber:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where ID = #id:INTEGER#
+  </update>
+  
+  
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.CPSUserBankCardQuery" resultClass="java.lang.Integer" >
+    select count(1) from CPS_USER_BANK_CARD
+    <include refid="CPSUserBankCard.condition" />
+  </select>
+  
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.CPSUserBankCardQuery" resultMap="CPSUserBankCardResult" >
+    select ID,CPS_USER_ID,DEPOSIT_BANK,BANK_ACCOUNT,ID_NUMBER
+    from CPS_USER_BANK_CARD
+    <include refid="CPSUserBankCard.condition" />
+  </select>
+  
+  <!-- 条件分页查询 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.CPSUserBankCardQuery" resultMap="CPSUserBankCardResult" >
+    select ID,CPS_USER_ID,DEPOSIT_BANK,BANK_ACCOUNT,ID_NUMBER
+    from CPS_USER_BANK_CARD
+    <include refid="CPSUserBankCard.condition" />
+    order by ID desc
+  	limit #start#,#pageSize#
+  </select>
+</sqlMap>

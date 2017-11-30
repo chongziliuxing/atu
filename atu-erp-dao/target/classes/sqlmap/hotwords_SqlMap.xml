@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Hotwords" >
+  <resultMap id="HotwordsResult" class="com.atu.erp.domain.Hotwords" >
+    <result column="id" property="id"  />
+    <result column="hotword_name" property="hotwordName" jdbcType="VARCHAR" />
+    <result column="sort_num" property="sortNum"  />
+    <result column="yn" property="yn"  />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 精确查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+        id = #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="hotwordName" >
+        hotword_name = #hotwordName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="sortNum" >
+        sort_num = #sortNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+  
+  <!-- 模糊查询条件 -->
+  <sql id="likeCondition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+        id = #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="hotwordName" >
+        hotword_name like '%$hotwordName$%'
+      </isNotNull>
+      <isNotNull prepend="and" property="sortNum" >
+        sort_num = #sortNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+  
+
+  <select id="selectByPrimaryKey" resultMap="HotwordsResult" parameterClass="java.lang.Integer" >
+    select id, hotword_name, sort_num,yn, created, modified
+    from search_hotwords
+    where id = #id:INTEGER#
+  </select>
+  
+
+  <insert id="insert" parameterClass="com.atu.erp.domain.Hotwords" >
+    insert into search_hotwords ( hotword_name,sort_num, yn, created, modified)
+    values (#hotwordName:VARCHAR#,  #sortNum:INTEGER#, 1,now(),now())
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			<![CDATA[SELECT @@IDENTITY AS id ]]>
+	  </selectKey>
+  </insert>
+  
+
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.Hotwords" >
+    update search_hotwords set modified = now()
+    <dynamic >
+      <isNotNull prepend="," property="hotwordName" >
+        hotword_name = #hotwordName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sortNum" >
+        sort_num = #sortNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where id = #id:INTEGER#
+  </update>
+  
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.HotwordsQuery" resultClass="java.lang.Integer" >
+    select count(1) from search_hotwords
+    <include refid="Hotwords.condition" />
+    order by sort_num
+  </select>
+  
+  <select id="selectByLikeCondition" parameterClass="com.atu.erp.domain.query.HotwordsQuery" resultMap="HotwordsResult"  >
+    select id, hotword_name,  sort_num, yn, created, modified from search_hotwords
+    <include refid="Hotwords.likeCondition" />
+    order by sort_num
+  </select>
+  
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.HotwordsQuery" resultMap="HotwordsResult"  >
+    select id, hotword_name, sort_num, yn, created, modified from search_hotwords
+    <include refid="Hotwords.condition" />
+    order by sort_num
+  </select>
+  
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.HotwordsQuery" resultMap="HotwordsResult"  >
+    select id, hotword_name,  sort_num,yn, created, modified
+    from search_hotwords
+    <include refid="Hotwords.condition" />
+    order by sort_num
+  	limit #start#,#pageSize#
+  </select>
+  
+  
+  <delete id="deleteHotwords" parameterClass="java.lang.Integer">
+    delete from search_hotwords where id=#id# 
+  </delete>
+  
+    
+  <delete id="deleteById" parameterClass="java.lang.Integer">
+    delete from search_hotwords where id=#id# 
+  </delete>
+  
+</sqlMap>

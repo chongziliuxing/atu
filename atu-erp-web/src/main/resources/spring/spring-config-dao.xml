@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="byName">
+	
+	<!-- 
+	<bean id="demoDao" class="com.jd.sns.vip.dao.impl.DemoDaoImpl">
+		<property name="dataSource" ref="bizApiDynamicMysqlDataSource"></property>
+	</bean>
+	 -->
+	 
+	<bean id="userDao" class="com.atu.erp.dao.impl.UserDaoImpl">
+	 	<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="userInfoDAO" class="com.atu.erp.dao.impl.UserInfoDAOImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="venderInfoDAO" class="com.atu.erp.dao.impl.VenderInfoDAOImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="promotionDAO" class="com.atu.erp.dao.impl.PromotionDAOImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="categoryDao" class="com.atu.erp.dao.impl.CategoryDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="addressDao" class="com.atu.erp.dao.impl.AddressDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+
+	<bean id="businessUserExtDao" class="com.atu.erp.dao.impl.BusinessUserExtDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="consigneeInfoDao" class="com.atu.erp.dao.impl.ConsigneeInfoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	
+	<bean id="itemDao" class="com.atu.erp.dao.impl.ItemDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="itemDescriptionDao" class="com.atu.erp.dao.impl.ItemDescriptionDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	<bean id="itemImageDao" class="com.atu.erp.dao.impl.ItemImageDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="itemPropertyDao" class="com.atu.erp.dao.impl.ItemPropertyDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	<bean id="orderInfoDao" class="com.atu.erp.dao.impl.OrderInfoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="orderShoppingCartDao" class="com.atu.erp.dao.impl.OrderShoppingCartDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	<bean id="paymentInfoDao" class="com.atu.erp.dao.impl.PaymentInfoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="promotionInfoDao" class="com.atu.erp.dao.impl.PromotionInfoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	<bean id="promotionProductDao" class="com.atu.erp.dao.impl.PromotionProductDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	<bean id="propertyDao" class="com.atu.erp.dao.impl.PropertyDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="propertyValueDao" class="com.atu.erp.dao.impl.PropertyValueDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>	
+	
+	<bean id="skuDao" class="com.atu.erp.dao.impl.SkuDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="smsDao" class="com.atu.erp.dao.impl.SmsDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="favoritesDao" class="com.atu.erp.dao.impl.FavoritesDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="promotionSkuDao" class="com.atu.erp.dao.impl.PromotionSkuDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="orderDetailDao" class="com.atu.erp.dao.impl.OrderDetailDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="sellerEntryDao" class="com.atu.erp.dao.impl.SellerEntryDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="indexImageDao" class="com.atu.erp.dao.impl.IndexImageDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="indexPromItemDao" class="com.atu.erp.dao.impl.IndexPromItemDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="indexRecommendItemDao" class="com.atu.erp.dao.impl.IndexRecommendItemDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="indexSellItemDao" class="com.atu.erp.dao.impl.IndexSellItemDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="balanceInfoDao" class="com.atu.erp.dao.impl.BalanceInfoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+		
+	<bean id="operationDao" class="com.atu.erp.dao.impl.OperationDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="servicesDao" class="com.atu.erp.dao.impl.ServicesDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="servInfoDao" class="com.atu.erp.dao.impl.ServInfoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	<bean id="brandDao" class="com.atu.erp.dao.impl.BrandDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="propertySubDao" class="com.atu.erp.dao.impl.PropertySubDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="cpsUserWithdrawCashDao" class="com.atu.erp.dao.impl.CpsUserWithdrawCashDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="tbCouponDao" class="com.atu.erp.dao.impl.TbCouponDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="tbCouponPromoDao" class="com.atu.erp.dao.impl.TbCouponPromoDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="orderConsigneeDao" class="com.atu.erp.dao.impl.OrderConsigneeDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="riskStatPvuvOrdersDao" class="com.atu.erp.dao.impl.RiskStatPvuvOrdersDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+	
+	<bean id="riskStatMinutesDao" class="com.atu.erp.dao.impl.RiskStatMinutesDaoImpl" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+		<property name="dataSource" ref="ecDataSource"></property>
+	</bean>
+</beans>
+

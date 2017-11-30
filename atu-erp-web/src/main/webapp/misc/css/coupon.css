@@ -1,0 +1,20 @@
+*{font-size:12px;}
+html{border:0;width:100%;}
+body{font-family:"宋体",Arail,verdana;font-size:14px;line-height:2.5em;color:#444;background:#fff;margin:0 auto;}
+
+/*页面标题*/
+.title{font-weight:bold;font-size:14px;color:#05539b; padding-left:25px;border:1px solid #b3d8ea;line-height:28px; text-align:left}
+td.title1,th.title1{font-weight:bold;padding-left:3px;text-align:left;border:none;background:#fff}
+
+/*表单区*/
+table{width: 100%;border-collapse: collapse;margin-top:5px;background:#fff}
+td,th{height:23px;border:#B3D8EA 1px solid;}
+.panel_search input,select{margin-left: 3px;}
+
+	
+
+
+
+
+
+

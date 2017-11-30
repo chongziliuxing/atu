@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CPSUser" >
+  <resultMap id="CPSUserResult" class="com.atu.erp.domain.CPSUser" >
+    <result column="CPS_USER_ID" property="cpsUserId"  />
+    <result column="CPS_USER_FLAG" property="cpsUserFlag" jdbcType="VARCHAR"/>
+    <result column="PAYMENT_PWD" property="paymentPwd" jdbcType="VARCHAR"/>
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="ALL_ENTER_MONEY" property="allEnterMoney"  />
+    <result column="ALL_OUT_MONEY" property="allOutMoney"  />
+  </resultMap>
+  
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="cpsUserId" >
+        CPS_USER_ID = #cpsUserId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="cpsUserFlag" >
+        CPS_USER_FLAG = #cpsUserFlag:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="paymentPwd" >
+        PAYMENT_PWD = #paymentPwd:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="allEnterMoney" >
+        ALL_ENTER_MONEY = #allEnterMoney:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="allOutMoney" >
+        ALL_OUT_MONEY = #allOutMoney:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="CPSUserResult" parameterClass="java.lang.Integer" >
+    select CPS_USER_ID,CPS_USER_FLAG,PAYMENT_PWD,CREATE_TIME,UPDATE_TIME,ALL_ENTER_MONEY,ALL_OUT_MONEY
+    from CPS_USER
+    where CPS_USER_ID = #cpsUserId:INTEGER#
+  </select>
+  
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.CPSUser" >
+    insert into CPS_USER(CPS_USER_FLAG,PAYMENT_PWD,CREATE_TIME,UPDATE_TIME,ALL_ENTER_MONEY,ALL_ENTER_MONEY)
+    values (#cpsUserFlag:VARCHAR#,#paymentPwd:VARCHAR#,now(),now(),#allEnterMoney:INTEGER#,#allOutMoney:INTEGER#)
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="cpsUserId">
+			<![CDATA[SELECT @@IDENTITY AS CPS_USER_ID ]]>
+	  </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.CPSUser" >
+    update CPS_USER set UPDATE_TIME = now()
+    <dynamic>
+      <isNotNull prepend="," property="cpsUserFlag" >
+        CPS_USER_FLAG = #cpsUserFlag:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="paymentPwd" >
+        PAYMENT_PWD = #paymentPwd:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="allEnterMoney" >
+        ALL_ENTER_MONEY = #allEnterMoney:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="allOutMoney" >
+        ALL_OUT_MONEY = #allOutMoney:INTEGER#
+      </isNotNull>
+    </dynamic>
+   	 where CPS_USER_ID = #cpsUserId:INTEGER#
+  </update>
+  
+  
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.CPSUserQuery" resultClass="java.lang.Integer" >
+    select count(1) from CPS_USER
+    <include refid="CPSUser.condition" />
+  </select>
+  
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.CPSUserQuery" resultMap="CPSUserResult" >
+    select CPS_USER_ID,CPS_USER_FLAG,PAYMENT_PWD,CREATE_TIME,UPDATE_TIME,ALL_ENTER_MONEY,ALL_ENTER_MONEY
+    from CPS_USER
+    <include refid="CPSUser.condition" />
+  </select>
+  
+  <!-- 条件分页查询 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.CPSUserQuery" resultMap="CPSUserResult" >
+    select CPS_USER_ID,CPS_USER_FLAG,PAYMENT_PWD,CREATE_TIME,UPDATE_TIME,ALL_ENTER_MONEY,ALL_ENTER_MONEY
+    from CPS_USER
+    <include refid="CPSUser.condition" />
+    order by CPS_USER_ID desc
+  	limit #start#,#pageSize#
+  </select>
+</sqlMap>

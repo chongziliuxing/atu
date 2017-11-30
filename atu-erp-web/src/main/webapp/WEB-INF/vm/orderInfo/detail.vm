@@ -1,0 +1,213 @@
+    <div class="box">
+           <div class="title">
+           		商品信息
+           </div>
+		   
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="middle">商品ID</div></td>
+                		<td class="TdLabel"><div align="middle">SKU</div></td>
+                		<td class="TdLabel"><div align="middle">商品名称</div></td>
+                		<td class="TdLabel"><div align="middle">阿土价</div></td>
+                		<td class="TdLabel"><div align="middle">购买量</div></td>
+                		<td class="TdLabel"><div align="middle">小计（元）</div></td>
+                	</tr>
+                	#foreach($orderDetail in $resultMap.orderDetailList)
+                	<tr>
+                		<td align="middle" class="TdValue">
+                			$!orderDetail.itemId
+                		</td>
+                		<td align="middle" class="TdValue">
+                			$!orderDetail.skuId
+                		</td>
+                		<td align="middle" class="TdValue">
+                			$!orderDetail.itemName
+                		</td>
+                		<td align="middle" class="TdValue">
+                			$!orderDetail.price
+                		</td>
+                		<td align="middle" class="TdValue">
+                			$!orderDetail.num
+                		</td>
+                		<td align="middle" class="TdValue">
+                		#set($skuMoney=$!orderDetail.price*$!orderDetail.num)
+                			$!skuMoney
+                		</td>
+                	</tr>
+                	#end
+				</table>
+		   </div>
+	</div>
+	
+	<div class="box">
+           <div class="title">
+           		基本信息
+           </div>
+		   
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">订单号：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.orderId
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">订单状态：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			#if($!resultMap.orderInfo.orderStatus==0)
+		                		新建订单
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==1)
+		                		支付完成
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==2)
+		                		确认收款
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==3)
+		                		尾款支付完成
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==4)
+		                		确认尾款
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==5)
+		                		商家发货确认
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==6)
+		                		用户收货确认
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==50)
+		                		订单完成
+		                	#end
+		                	#if($!resultMap.orderInfo.orderStatus==51)
+		                		已取消订单
+		                	#end
+		                	
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">买家ID：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.userId
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">下单时间：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!{dateFormatUtils.format($!resultMap.orderInfo.orderTime)}
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">备注：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.remark
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+	</div>
+	
+	<div class="box">
+           <div class="title">
+           		收货人信息    #if($!resultMap.consigneeList)（$!resultMap.consigneeList.size()个）#else #end
+           </div>
+		   
+           <div class="panel_form">
+                	#if($!resultMap.consigneeList)
+                		#foreach($orderConsignee in $resultMap.consigneeList)
+                		<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+		                	<tr>
+		                		<td class="TdLabel"><div align="right">收货人姓名：</div></td>
+		                		<td width="78%" align="left" colspan="10" class="TdValue">
+		                			$!orderConsignee.consigneeName
+		                		</td>
+		                	</tr>
+		                	<tr>
+		                		<td class="TdLabel"><div align="right">手机号：</div></td>
+		                		<td width="78%" align="left" colspan="10" class="TdValue">
+		                			$!orderConsignee.consigneeMobile
+		                		</td>
+		                	</tr>
+		                	<tr>
+		                		<td class="TdLabel"><div align="right">收货地址：</div></td>
+		                		<td width="78%" align="left" colspan="10" class="TdValue">
+		                			$!orderConsignee.address
+		                		</td>
+		                	</tr>
+		                	<tr>
+		                		<td class="TdLabel"><div align="right">件数：</div></td>
+		                		<td width="78%" align="left" colspan="10" class="TdValue">
+		                			$!orderConsignee.buyNum
+		                		</td>
+		                	</tr>
+		                	#if($!resultMap.orderInfo.orderStatus==5)
+		                	<tr>
+		                		<td class="TdLabel"><div align="right">快递信息：</div></td>
+		                		<td width="78%" align="left" colspan="10" class="TdValue">
+		                			$!orderConsignee.express
+		                		</td>
+		                	</tr>
+		                	#end
+		                </table>
+		                #end
+	                #else
+	                <table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+	                	<tr>
+	                		<td class="TdLabel"><div align="right">收货人姓名：</div></td>
+	                		<td width="78%" align="left" colspan="10" class="TdValue">
+	                			$!resultMap.orderInfo.consigneeName
+	                		</td>
+		                </tr>
+		                <tr>
+	                		<td class="TdLabel"><div align="right">手机号：</div></td>
+	                		<td width="78%" align="left" colspan="10" class="TdValue">
+	                			$!resultMap.orderInfo.consigneeMobile
+	                		</td>
+	                    </tr>
+	                	<tr>
+	                		<td class="TdLabel"><div align="right">收货地址：</div></td>
+	                		<td width="78%" align="left" colspan="10" class="TdValue">
+	                			$!resultMap.orderInfo.consigneeMobile
+	                		</td>
+	                	</tr>
+	                </table>
+	                #end
+		   </div>
+	</div>
+	
+	<div class="box">
+           <div class="title">
+           		财务信息
+           </div>
+		   
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+                	<tr>
+                		<td class="TdLabel"><div align="right">订单总金额：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.orderMoney
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">优惠金额：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.discountMoney
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">应付金额：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.oughtPayMoney
+                		</td>
+                	</tr>
+                	<tr>
+                		<td class="TdLabel"><div align="right">支付金额：</div></td>
+                		<td width="78%" align="left" colspan="10" class="TdValue">
+                			$!resultMap.orderInfo.payMoney
+                		</td>
+                	</tr>
+				</table>
+		   </div>
+	</div>
+	

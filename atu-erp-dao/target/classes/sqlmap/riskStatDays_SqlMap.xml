@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="riskStatDays" >
+  <resultMap id="riskStatDaysResult" class="com.atu.erp.domain.RiskStatDays" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="INTEGER" />
+    <result column="PAGE_ID" property="pageId" jdbcType="INTEGER" />
+    <result column="TYPE_ID" property="typeId" jdbcType="INTEGER" />
+    <result column="DAYS" property="days" jdbcType="INTEGER" />
+    <result column="COUNT" property="count" jdbcType="INTEGER" />
+    <result column="KEY_DATE" property="keyDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIED_TIME" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="DAY_VALUE" property="dayValue" jdbcType="INTEGER" />
+  </resultMap>
+
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+  	   ID = #id:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="projectId" >
+  	   PROJECT_ID = #projectId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="pageId" >
+  	   PAGE_ID = #pageId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="typeId" >
+  	   TYPE_ID = #typeId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="days" >
+  	   DAYS = #days:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="count" >
+  	   COUNT = #count:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="keyDate" >
+  	   KEY_DATE = #keyDate:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="createTime" >
+  	   CREATE_TIME = #createTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="modifiedTime" >
+  	   MODIFIED_TIME = #modifiedTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="dayValue" >
+  	   DAY_VALUE = #dayValue:INTEGER#
+  	  </isNotNull>
+  	 </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="riskStatDaysResult" parameterClass="java.lang.Integer" >
+    select 
+    ID,PROJECT_ID,PAGE_ID,TYPE_ID,DAYS,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,DAY_VALUE
+    from risk_stat_days
+    where ID = #id#
+  </select>
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.RiskStatDays" >
+    insert into risk_stat_days (
+    PROJECT_ID,PAGE_ID,TYPE_ID,DAYS,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,DAY_VALUE
+    ) values(
+    #projectId#,#pageId#,#typeId#,#days#,#count#,#keyDate#,#createTime#,#modifiedTime#,#dayValue#
+    )
+    <selectKey resultClass="java.lang.Integer" keyProperty="id">
+      <![CDATA[SELECT @@IDENTITY AS ID ]]>
+    </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.RiskStatDays" >
+    update risk_stat_days set ID = ID
+    <dynamic>
+      <isNotNull prepend="," property="projectId" >
+        PROJECT_ID = #projectId#
+      </isNotNull>
+      <isNotNull prepend="," property="pageId" >
+        PAGE_ID = #pageId#
+      </isNotNull>
+      <isNotNull prepend="," property="typeId" >
+        TYPE_ID = #typeId#
+      </isNotNull>
+      <isNotNull prepend="," property="days" >
+        DAYS = #days#
+      </isNotNull>
+      <isNotNull prepend="," property="count" >
+        COUNT = #count#
+      </isNotNull>
+      <isNotNull prepend="," property="keyDate" >
+        KEY_DATE = #keyDate#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="modifiedTime" >
+        MODIFIED_TIME = #modifiedTime#
+      </isNotNull>
+      <isNotNull prepend="," property="dayValue" >
+        DAY_VALUE = #dayValue#
+      </isNotNull>
+    </dynamic>
+	  where ID = #id# 
+  </update>
+
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.RiskStatDaysQuery" resultClass="java.lang.Integer" >
+    select count(1) from risk_stat_days
+    <include refid="riskStatDays.condition" />
+  </select>
+
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.RiskStatDaysQuery" resultMap="riskStatDaysResult" >
+    select 
+    ID,PROJECT_ID,PAGE_ID,TYPE_ID,DAYS,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,DAY_VALUE
+    from risk_stat_days
+    <include refid="riskStatDays.condition" />
+  </select>
+
+  <!-- 分页条件查询列表 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.RiskStatDaysQuery" resultMap="riskStatDaysResult" >
+    select 
+    ID,PROJECT_ID,PAGE_ID,TYPE_ID,DAYS,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,DAY_VALUE
+    from risk_stat_days
+    <include refid="riskStatDays.condition" />
+    limit #start#,#pageSize#
+  </select>
+</sqlMap>

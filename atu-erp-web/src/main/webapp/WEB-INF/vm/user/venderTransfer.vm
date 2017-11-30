@@ -1,0 +1,80 @@
+    <div class="box">
+           <div class="title">
+				商家转账信息
+           </div>
+		   
+           <div class="panel_form">
+				<table width="100%" cellspacing="0" cellpadding="0" border="0" id="ctl00_CPform_tab_userinfo">
+					<tbody>
+						<tr>
+                    		<td class="TdLabel"><div align="right">商家编号：</div></td>
+                    		<td width="78%" align="left" colspan="10" class="TdValue">
+                    			<input type="text" id="venderUserId" value="$!venderUserId">
+                    		</td>
+                    	</tr>
+                    	<tr>
+                    		<td class="TdLabel"><div align="right">订单编号：</div></td>
+                    		<td width="78%" align="left" colspan="10" class="TdValue">
+                    			<input type="text" value=""  id="orderId">
+                    		</td>
+                    	</tr>
+                    	<tr>
+                    		<td class="TdLabel"><div align="right">结算金额：</div></td>
+                    		<td width="78%" align="left" colspan="10" class="TdValue">
+                    			<input  type="text" value=""  id="balanceMoneyFact">
+                    		</td>
+                    	</tr>
+                    	<tr>
+                    		<td class="TdLabel"><div align="right">银行流水单号：</div></td>
+                    		<td width="78%" align="left" colspan="10" class="TdValue">
+                    			<input type="text" value="" id="bankNumber">
+                    		</td>
+                    	</tr>
+                    	<tr>
+                    		<td class="TdLabel"><div align="right"></div></td>
+                    		<td width="78%" align="left" colspan="10" class="TdValue">
+                    			<input type="button" value="确认" onclick="addBalanceInfo($!venderUserId);">&nbsp;&nbsp;&nbsp;&nbsp;
+                    			<input type="button" value="取消" onclick="$.modal.close();">
+                    		</td>
+                    	</tr>
+                	</tbody>
+				</table>
+		   </div>
+	</div>
+
+	<script type="text/javascript">
+		function addBalanceInfo(venderUserId){
+			
+			var orderId = $("#orderId").val();
+			var balanceMoneyFact = $("#balanceMoneyFact").val();
+			var bankNumber = $("#bankNumber").val();
+			if(isNaN(orderId)){
+				alert("订单编号格式不正确");
+				return;
+			}
+			if(isNaN(balanceMoneyFact)){
+				alert("结算金额格式不正确");
+				return;
+			}
+			if(bankNumber == ""){
+				alert("银行流水单号不能为空");
+				return;
+			}
+			
+			$.ajax({
+				type : "post",
+		    	url : "/balanceInfo/addBalanceInfo",
+		    	data : {venderUserId:venderUserId,balanceMoneyFact:balanceMoneyFact,bankNumber:bankNumber,orderId:orderId},
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("添加成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		};
+	</script>

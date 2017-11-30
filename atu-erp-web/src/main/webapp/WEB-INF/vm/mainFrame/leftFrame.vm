@@ -1,0 +1,335 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<title></title>
+<script type="text/javascript" src="$!{contextPath}/misc/js/new/jquery-1.6.2.min.js"></script>
+</head>
+<body>
+	<link rel="stylesheet" href="$!{contextPath}/style/new/powerFloat.css" type="text/css"/>
+	<link rel="stylesheet" href="$!{contextPath}/style/new/secondary-menu.css?t=2" type="text/css"/>
+	<script type="text/javascript" src="$!{contextPath}/misc/js/new/jquery-powerFloat.js"></script>
+	<script type="text/javascript" src="$!{contextPath}/misc/js/new/secondary-menu.js?t=2"></script>
+	<script type="text/javascript" src="$!{contextPath}/misc/js/new/jsMap.js?t=2"></script>
+	<script type="text/javascript">
+		var menuTransMap = new Map();
+		function randomUrl(url, obj) {
+			var append = url.indexOf('?') == -1 ? '?' : '&';
+			url = url + append + 't=' + new Date().getTime();
+			parent.rightFrame.location = url;
+		}
+	</script>
+
+		<div class="side-bar">
+			<div class="menu">
+				<div class="menu-title">
+					<a class="menu-title-name" target="open"  title="基础数据"></a> 
+					<a href="javascript:void(0)" title="展开全部菜单" id="expandAll" class="add-app">展开</a> 
+					<a href="javascript:void(0)" title="隐藏全部菜单" id="collapseAll" class="add-app" style="display: none">隐藏</a>
+				</div>
+				<div class="menu-content">
+					<div class="menu-item-module">
+						<div class="menu-item">
+							<a title="会员管理" href="javascript:void(0)">会员管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item">
+								<a title="用户管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/user/list',this);">用户管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+						<div class="menu-item">
+							<a title="商品管理" href="javascript:void(0)">商品管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item">
+								<a title="一级类目管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/category/category1',this);">一级类目管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+
+							<li class="sub-menu-item">
+								<a title="二级类目管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/category/category2',this);">二级类目管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<li class="sub-menu-item">
+								<a title="三级类目管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/category/category3',this);">三级类目管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<li class="sub-menu-item">
+								<a title="四级类目管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/category/category4',this);">四级类目管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+
+							<li class="sub-menu-item">
+								<a title="待售商品管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/product/preSaleProduct',this);">待售商品管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+
+							<li class="sub-menu-item">
+								<a title="在售商品管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/product/onSaleProduct',this);">在售商品管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="下架商品管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/product/stopSaleProduct',this);">下架商品管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="一级服务类目" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/services/category1st',this);">一级服务类目</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="二级服务类目" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/services/category2nd',this);">二级服务类目</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="新服务发布" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/services/addService',this);">新服务发布</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<li class="sub-menu-item">
+								<a title="商品品牌管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/brand/home',this);">商品品牌管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<!-- <li class="sub-menu-item">
+								<a title="商品属性管理" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/property/home',this);">商品属性管理</a>
+							</li> -->
+						</ul>
+						<div class="menu-item">
+							<a title="促销管理" href="javascript:void(0)">促销管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item"><a title="商家促销商品列表"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/promotion/plannedPromotion',this);">商家促销商品列表</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+						
+						<div class="menu-item">
+							<a title="促销管理" href="javascript:void(0)">订单管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+							<li class="sub-menu-item"><a title="订单管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/orderInfo/index',this);">订单管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+						<div class="menu-item">
+							<a title="移动端首页管理" href="javascript:void(0)">移动端首页管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item"><a title="首页轮播图"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/image/addImg',this);">首页广告图</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<li class="sub-menu-item"><a title="新品推荐"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/appimagerecommend/addImg',this);">首页新品推荐</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							
+							<li class="sub-menu-item"><a title="热销商品"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/appimagesell/addImg',this);">首页热销商品</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<li class="sub-menu-item"><a title="促销商品"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/appimageprom/addImg',this);">首页促销商品</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+
+						<div class="menu-item">
+							<a title="财务管理" href="javascript:void(0)">财务管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item"><a title="商家银行账户管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/user/bankList',this);">商家银行账户管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+
+
+							<li class="sub-menu-item"><a title="商家基本信息管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/user/baseInfoList',this);">商家基本信息管理</a>
+							</li>
+							<!-- <li class="sub-menu-item"><a title="供应商提现管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/finance/supplyCash',this);">供应商提现管理</a>
+							</li>
+							<li class="sub-menu-item"><a title="分销用户提现管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/finance/cpsUserCash',this);">分销用户提现管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script> -->
+
+							<li class="sub-menu-item"><a title="结算管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/balanceInfo/index',this);">结算管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<!-- <li class="sub-menu-item"><a title="分销商提现管理"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/withdrawals/index',this);">分销商提现管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script> -->
+						</ul>						
+						
+						<div class="menu-item">
+							<a title="优惠券管理" href="javascript:void(0)">优惠券管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item">
+								<a title="申请优惠券" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/coupon/index',this);">申请优惠券</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="我的优惠券" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/coupon/myCoupon',this);">我的优惠券</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="优惠券财务统计" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/coupon/statistics',this);">优惠券财务统计</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+						
+						<div class="menu-item">
+							<a title="ERP-运营管理" href="javascript:void(0)">ERP-运营管理</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+							<li><a title="ERP-评价管理"
+								target="rightFrame" class="sub-menu-item menu-item" href="javascript:void(0);" >ERP-评价管理</a>
+								<ul class="sub-menu" style="display: none;">
+
+							<li class="sub-menu-item"><a title="评价审核"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/operation/commentList?status=0',this);">评价审核</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+
+
+							<li class="sub-menu-item"><a title="禁言名单"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/operation/blackList',this);">禁言名单</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							
+							<li class="sub-menu-item"><a title="ERP-热搜词配置"
+								target="rightFrame" href="javascript:void(0);"
+								onclick="javascript:randomUrl('/operation/addHotword',this);">热搜词配置管理</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+						<div class="menu-item">
+							<a title="天宝数据看板" href="javascript:void(0)">天宝数据看板</a>
+						</div>
+						<ul class="sub-menu" style="display: none;">
+							<li class="sub-menu-item">
+								<a title="经营概况" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/lookData/survey',this);">经营概况</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="全站流量(图版)" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/lookData/initChart',this);">全站流量(图版)</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+							<li class="sub-menu-item">
+								<a title="指标汇总(EXCEL)" target="rightFrame" href="javascript:void(0);" onclick="javascript:randomUrl('/lookData/statistics?projectId=0',this);">指标汇总(EXCEL)</a>
+							</li>
+							<script type="text/javascript">
+								menuTransMap.put('', '');
+							</script>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+</body>
+</html>

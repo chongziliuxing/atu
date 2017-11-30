@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>编辑优惠券</title>
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="$assetModule.getTarget("/js/coupon/coupon.js")"></script>
+		<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script> 
+		<link type="text/css" rel="stylesheet" href="/misc/css/coupon.css"/>
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">编辑优惠券</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    <form id="f1">
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="10">
+    		 <tr>
+            	<td align="right" style="width:100px">
+                	活动编号：
+                	<input type="hidden"  name="couponPromoId" value="$!tbCouponPromo.couponPromoId"/>
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text" id="couponPromoCode" name="couponPromoCode" value="$!tbCouponPromo.couponPromoCode" readonly="readonly"/>
+				</td>
+             </tr>	
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	申请人：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text" id="applyUserName" name="applyUserName" value="$!tbCouponPromo.applyUserName"/>
+				</td>
+                <td align="right" style="width:100px">
+                	申请部门：
+                </td>
+                <td align="left" style="width:100px">
+					<select style="width: 130px">
+						<option>市场部</option>
+					</select>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	发放业务类型：
+                </td>
+                <td align="left" style="width:100px">
+                	<select name="couponBusinessType" id="couponBusinessType"  style="width: 130px">
+						<option  #if($!tbCouponPromo.couponBusinessType==1) selected="selected" #end value="1">直接发放账号</option>
+						<option  #if($!tbCouponPromo.couponBusinessType==2) selected="selected" #end value="2">用户行为相关</option>
+						<option  #if($!tbCouponPromo.couponBusinessType==3) selected="selected" #end value="3">通过链接领取</option>
+					</select>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	活动名称：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text"  id="couponPromoName" name="couponPromoName" value="$!tbCouponPromo.couponPromoName"/>
+				</td>
+				<td align="right" style="width:100px">
+                	费用归属：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="radio" name="applyDepartmentName" checked="checked" />申请部门
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	优惠券类型：
+                </td>
+				<td align="left" style="width:100px">
+                	<input type="radio" name="couponType"  value="0" #if($!tbCouponPromo.couponType==0) checked="checked" #end onclick="getCouponType(this)" />满减券
+                	<input type="radio" name="couponType"  value="1" #if($!tbCouponPromo.couponType==1) checked="checked" #end onclick="getCouponType(this)" />直减券
+                	<input type="radio" name="couponType"  value="2" #if($!tbCouponPromo.couponType==2) checked="checked" #end onclick="getCouponType(this)" />免运费券
+				</td>
+				<td align="right" style="width:100px">
+                	发放形式：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="radio" checked="checked" />
+                	<span id="span1">
+                		#if($!tbCouponPromo.couponBusinessType==1)
+							直接发放账号
+                		#elseif ($!tbCouponPromo.couponBusinessType==2)
+                			用户行为相关
+						#elseif ($!tbCouponPromo.couponBusinessType==3)
+							通过链接领取
+						#end
+                	</span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	使用限额：
+                </td>
+				<td align="left" style="width:100px" colspan="3">
+					<span id="span2">
+						#if($!tbCouponPromo.couponType==0)
+							订单金额大于等于<input type='text' id='orderQuota' name='orderQuota' value="$!tbCouponPromo.orderQuota" style='width:30px' />元,
+				                              减<input type='text' name='couponAmount' id='couponAmount' value="$!tbCouponPromo.couponAmount" style='width:30px' />元
+						#elseif ($!tbCouponPromo.couponType==1)
+							订单金额直减<input type='text' id='couponAmount' name='couponAmount' value='$!tbCouponPromo.couponAmount' style='width:30px' />
+						#elseif ($!tbCouponPromo.couponType==2)
+							免运费券 （仅限39元以下订单使用）
+						#end
+				    </span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	申请数量：
+                </td>
+				<td align="left" style="width:100px" colspan="3">
+                	<input type="text" id="couponApplyAmount" name="couponApplyAmount" value="$!tbCouponPromo.couponApplyAmount"/>张
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px" >
+                	有效期类型：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<input type="radio" name="couponValidType" value="0" #if($!tbCouponPromo.couponValidType==0) checked="checked" #end  onclick="getcouponValidType(this)" />相对时间
+                	<input type="radio" name="couponValidType" value="1" #if($!tbCouponPromo.couponValidType==1) checked="checked" #end  onclick="getcouponValidType(this)" />开始时间为当前时间，结束自定义
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	具体时间：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<span id="span3">
+                		#if($!tbCouponPromo.couponValidType==0)
+							<input type='text' id='couponValidDays' name='couponValidDays'  value="$!tbCouponPromo.couponValidDays" style='width:30px'/>天
+						#elseif ($!tbCouponPromo.couponValidType==1)
+							<input type="text" id='promoEndtime' name="promoEndtime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!tbCouponPromo.promoEndtime,'yyyy-MM-dd')}" />
+						#end
+                	</span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	发放条件：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<input type="radio" checked="checked"/>
+                	<span id="span4">
+                		#if($!tbCouponPromo.couponBusinessType==2)
+							用户注册完成APP则自动发放
+                		#else
+                			所有注册用户
+                		#end
+                	</span>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	活动状态：
+                </td>
+                <td align="left" style="width:100px" colspan="3">
+                	<input type="radio" name="couponPromoState" value="0" #if($!tbCouponPromo.couponPromoState==0) checked="checked" #end  />待上线
+                	<input type="radio" name="couponPromoState" value="1" #if($!tbCouponPromo.couponPromoState==1) checked="checked" #end  />正在进行
+                	<input type="radio" name="couponPromoState" value="2" #if($!tbCouponPromo.couponPromoState==2) checked="checked" #end  />已结束
+				</td>
+            </tr>
+        </table>
+        <br/><br/>
+        <div align="center">
+        	<input type="button" value="提交" id="editCoupon"/>
+        </div>
+    </div>
+    </form>
+    <!--查询区结束--> 
+</div>
+<!--盒子结束--> 
+ </body>
+</html>

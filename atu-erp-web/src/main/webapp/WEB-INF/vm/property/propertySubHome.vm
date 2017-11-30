@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>管理页面</title>
+        <link href="/style/erpstyle.css"rel="stylesheet" type="text/css" />
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+        <script language="javascript" src="/js/erpstyle1.js"></script>
+        <script language="javascript" src="/js/common.js"></script>
+    </head>
+    <body>
+
+<div class="box"><!--标题区开始-->
+    <div class="title1">
+        <div class="left">
+            <div class="title_gl">增加商品子属性</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+        <div class="right">
+            <div class="zt"></span>
+        </div>
+    </div>
+</div>
+<!--标题区结束-->
+<div style="height: 10px;"></div>
+<div class="panel_search1"><!--属性编辑区开始-->
+	<form id="proSubForm" name="proSubForm" method="post" >
+		<input type="hidden" id="propertyId" name="propertyId" value="${propertyId}" />
+        <table>
+        	<tr>
+        		<td style="font-weight: bold; width: 100px" align="right">添加商品子属性</td>
+        	</tr>
+    		<tr>
+				<td align="right" style="width: 100px">商品子属性：</td>
+				<td>
+					<input type="text" id="propertySubName" name="propertySubName" value="" style="width: 200px" />
+				</td>
+        	</tr>
+        	<tr>
+        		<td align="right" style="width: 100px"></td>
+        		<td style="width: 200px"><input type="button" id="addproSub"
+        			value="添加" /></td>
+        	</tr>
+        </table>
+	</form>
+</div><!--查询区结束-->
+<div class="panel_search1"><!--查询区开始-->
+    <table style="border-collapse: collapse;" id="propertyTH">
+    	<tr>
+    		<td style="font-weight: bold;" align="left" colspan="8">商品属性列表
+    		</td>
+    	</tr>
+    </table>
+    <table style="border-collapse: collapse;" id="proSubTab">
+    </table>
+</div><!--查询区结束-->
+
+<br />
+<!--盒子结束-->
+<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script>
+
+<script langusge="javascript">
+$(document).ready(function(){
+	getList();
+});
+
+function getList() {
+	var propertyId = document.getElementById("propertyId").value;
+	jQuery.ajax( {
+		url : "/property/listProSub",
+		type : "post",
+		dataType : "json",
+		data : "propertyId=" + propertyId,
+		success : function(data) {
+			if (data.msg == "success") {
+				$("#proSubTab").empty();
+				var propertySubList = data.propertySubList
+				$("#proSubTab").append(
+					"<tr style='font-weight:bold;'>" +
+    					"<th class='tdgoods' style='width: 100px'>商品子属性名称</th>" +
+    					"<th class='tdgoods' style='width: 100px'>操作</th>" +
+					"</tr>"
+				);
+				for(var i=0; i<propertySubList.length; i++) {
+					var propertySub = propertySubList[i];
+					$("#proSubTab").append(
+						"<tr>" +
+    						"<td class='tdgoods' style='width: 100px'>"+ propertySub.propertySubName +"</td>" +
+    						"<td class='tdgoods' style='width: 100px'>" +
+    							"<a id='' href=''>删除</a>&nbsp;&nbsp;" +
+    						"</td>" +
+						"</tr>"
+					);
+				}
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+}
+
+$("#addproSub").click(function() {
+	jQuery.ajax( {
+		url : "/property/addProSub",
+		type : "post",
+		dataType : "json",
+		data : $("#proSubForm").serialize(),
+		success : function(data) {
+			if (data.msg == "success") {
+    			getList();
+			}
+		},
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+});
+
+</script>
+</body>
+</html>

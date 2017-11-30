@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>管理页面</title>
+        <link href="/style/erpstyle.css"rel="stylesheet" type="text/css" />
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+        <script language="javascript" src="/js/erpstyle1.js"></script>
+        <script language="javascript" src="/js/common.js"></script>
+    </head>
+    <body>
+
+<form id="brandForm" name="brandForm" method="post" >
+<div class="box"><!--标题区开始-->
+    <div class="title1">
+        <div class="left">
+            <div class="title_gl">增加商品属性</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+        <div class="right">
+            <div class="zt"></span>
+        </div>
+    </div>
+</div>
+<!--标题区结束-->
+<div style="height: 10px;"></div>
+
+
+<div class="panel_search1"><!--属性编辑区开始-->
+    <table>
+    	<tr>
+    		<td style="font-weight: bold; width: 100px" align="right">添加品牌</td>
+    	</tr>
+    	<tr>
+    		<td>品牌名称</td>
+    		<td style="width: 200px">
+    			<input type="text" id="brandName" name="brandName" value="" style="width: 200px" />
+    		</td>
+    		<td></td>
+    	</tr>
+    	<tr>
+    		<td align="right" style="width: 100px"></td>
+    		<td style="width: 200px"><input type="button" id="addBrand"
+    			value="添加" /></td>
+    	</tr>
+    </table>
+<!--查询区结束-->
+</div>
+<div class="panel_search1"><!--查询区开始-->
+    <table style="border-collapse: collapse;" id="propertyTH">
+    	<tr>
+    		<td style="font-weight: bold;" align="left" colspan="8">品牌列表
+    		</td>
+    	</tr>
+    </table>
+    <table style="border-collapse: collapse;" id="brandTab">
+    </table>
+<!--查询区结束-->
+</div>
+<br />
+<input type="hidden" id="ifHaveProperty" name="ifHaveProperty" value="" />
+<input type="hidden" id="propertyId" name="propertyId" value="" />
+</form>
+<!--盒子结束-->
+<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script>
+
+<script langusge="javascript">
+$(document).ready(function(){
+	getList();
+});
+
+function checkBrandName(){
+	var brandName = $("#brandName").val();
+	if(brandName == ""){
+		alert("请输入品牌名称");
+		$("#brandName").focus();
+		return false;
+	}
+	return true;
+}
+
+function getList() {
+	jQuery.ajax( {
+		url : "/brand/listBrand",
+		type : "post",
+		dataType : "json",
+		data : "",
+		success : function(data) {
+			if (data.msg == "success") {
+				$("#brandTab").empty();
+				var brandList = data.brandList
+				$("#brandTab").append(
+					"<tr style='font-weight:bold;'>" +
+    					"<th class='tdgoods' style='width: 100px'>品牌名称</th>" +
+    					"<th class='tdgoods' style='width: 100px'>操作</th>" +
+					"</tr>"
+				);
+				for(var i=0; i<brandList.length; i++) {
+					var brand = brandList[i];
+					$("#brandTab").append(
+						"<tr>" +
+    						"<td class='tdgoods' style='width: 100px'>"+ brand.brandName +"</td>" +
+    						"<td class='tdgoods' style='width: 100px'>" +
+    							"<a id='"+brand.brandId+"' href='javascript:void(0);' onclick='delBrand("+ brand.brandId + ")'>删除</a>" +
+    						"</td>" +
+						"</tr>"
+					);
+				}
+			}
+		},                 
+		errot : function() {
+			alert("系统超时！");
+		}
+	});
+}
+$("#addBrand").click(function() {
+	if(checkBrandName()){
+		jQuery.ajax( {
+			url : "/brand/addBrand",
+			type : "post",
+			dataType : "json",
+			data : $("#brandForm").serialize(),
+			success : function(data) {
+				if (data.msg == "success") {
+	    			getList();
+				}
+			},
+			errot : function() {
+				alert("系统超时！");
+			}
+		});
+	}
+});
+function delBrand(brandId){
+	if(confirm("确定要删除吗？")){
+		$.ajax( {
+			url : "/brand/delBrand",
+			type : "post",
+			dataType : "json",
+			data : "brandId="+brandId,
+			success : function(data) {
+				if (data.msg == "success") {
+					//删除成功
+					alert("品牌删除成功！");
+					$("#"+brandId).parent().parent().remove();
+				} else {
+					alert("系统异常，删除失败！");
+				}
+			},
+			errot : function() {
+				alert("系统超时，删除失败！");
+			}
+		});
+	}
+}
+</script>
+</body>
+</html>

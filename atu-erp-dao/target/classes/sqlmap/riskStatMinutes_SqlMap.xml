@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="riskStatMinutes" >
+  <resultMap id="riskStatMinutesResult" class="com.atu.erp.domain.RiskStatMinutes" >
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="INTEGER" />
+    <result column="PAGE_ID" property="pageId" jdbcType="INTEGER" />
+    <result column="TYPE_ID" property="typeId" jdbcType="INTEGER" />
+    <result column="MINUTES" property="minutes" jdbcType="INTEGER" />
+    <result column="COUNT" property="count" jdbcType="INTEGER" />
+    <result column="KEY_DATE" property="keyDate" jdbcType="TIMESTAMP" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MODIFIED_TIME" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="MINUTE_VALUE" property="minuteValue" jdbcType="INTEGER" />
+  </resultMap>
+
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="id" >
+  	   ID = #id:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="projectId" >
+  	   PROJECT_ID = #projectId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="pageId" >
+  	   PAGE_ID = #pageId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="typeId" >
+  	   TYPE_ID = #typeId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="minutes" >
+  	   MINUTES = #minutes:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="count" >
+  	   COUNT = #count:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="keyDate" >
+  	   KEY_DATE = #keyDate:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="createTime" >
+  	   CREATE_TIME = #createTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="modifiedTime" >
+  	   MODIFIED_TIME = #modifiedTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="minuteValue" >
+  	   MINUTE_VALUE = #minuteValue:INTEGER#
+  	  </isNotNull>
+  	 </dynamic>
+  </sql>
+
+  <!-- 依据主键进行查询 -->
+  <select id="selectByPrimaryKey" resultMap="riskStatMinutesResult" parameterClass="java.lang.Integer" >
+    select 
+    ID,PROJECT_ID,PAGE_ID,TYPE_ID,MINUTES,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,MINUTE_VALUE
+    from risk_stat_minutes
+    where ID = #id#
+  </select>
+
+  <!-- 添加信息 -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.RiskStatMinutes" >
+    insert into risk_stat_minutes (
+    PROJECT_ID,PAGE_ID,TYPE_ID,MINUTES,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,MINUTE_VALUE
+    ) values(
+    #projectId#,#pageId#,#typeId#,#minutes#,#count#,#keyDate#,#createTime#,#modifiedTime#,#minuteValue#
+    )
+    <selectKey resultClass="java.lang.Integer" keyProperty="id">
+      <![CDATA[SELECT @@IDENTITY AS ID ]]>
+    </selectKey>
+  </insert>
+
+  <!-- 依据主键进行修改 -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.RiskStatMinutes" >
+    update risk_stat_minutes set ID = ID
+    <dynamic>
+      <isNotNull prepend="," property="projectId" >
+        PROJECT_ID = #projectId#
+      </isNotNull>
+      <isNotNull prepend="," property="pageId" >
+        PAGE_ID = #pageId#
+      </isNotNull>
+      <isNotNull prepend="," property="typeId" >
+        TYPE_ID = #typeId#
+      </isNotNull>
+      <isNotNull prepend="," property="minutes" >
+        MINUTES = #minutes#
+      </isNotNull>
+      <isNotNull prepend="," property="count" >
+        COUNT = #count#
+      </isNotNull>
+      <isNotNull prepend="," property="keyDate" >
+        KEY_DATE = #keyDate#
+      </isNotNull>
+      <isNotNull prepend="," property="createTime" >
+        CREATE_TIME = #createTime#
+      </isNotNull>
+      <isNotNull prepend="," property="modifiedTime" >
+        MODIFIED_TIME = #modifiedTime#
+      </isNotNull>
+      <isNotNull prepend="," property="minuteValue" >
+        MINUTE_VALUE = #minuteValue#
+      </isNotNull>
+    </dynamic>
+	  where ID = #id# 
+  </update>
+
+  <!-- 条件查询总数 -->
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.RiskStatMinutesQuery" resultClass="java.lang.Integer" >
+    select count(1) from risk_stat_minutes
+    <include refid="riskStatMinutes.condition" />
+  </select>
+
+  <!-- 条件查询列表 -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.RiskStatMinutesQuery" resultMap="riskStatMinutesResult" >
+    select 
+    ID,PROJECT_ID,PAGE_ID,TYPE_ID,MINUTES,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,MINUTE_VALUE
+    from risk_stat_minutes
+    <include refid="riskStatMinutes.condition" />
+  </select>
+
+  <!-- 分页条件查询列表 -->
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.RiskStatMinutesQuery" resultMap="riskStatMinutesResult" >
+    select 
+    ID,PROJECT_ID,PAGE_ID,TYPE_ID,MINUTES,COUNT,KEY_DATE,CREATE_TIME,MODIFIED_TIME,MINUTE_VALUE
+    from risk_stat_minutes
+    <include refid="riskStatMinutes.condition" />
+    limit #start#,#pageSize#
+  </select>
+  
+  <!-- 条件查询PV、UV总数-->
+  <select id="selectPVUVCount" parameterClass="com.atu.erp.domain.query.RiskStatMinutesQuery" resultClass="java.lang.Integer" >
+  	select
+  	SUM(count) count 
+  	from risk_stat_minutes
+  	<dynamic prepend="where" >
+  		<isNotNull prepend="and" property="projectId" >
+  	   		PROJECT_ID = #projectId:INTEGER#
+  	  	</isNotNull>
+  		<isNotNull prepend="and" property="typeId" >
+  	   		TYPE_ID = #typeId:INTEGER#
+  	  	</isNotNull>
+  	  	<isNotNull prepend="and" property="keyDate" >
+  	  		KEY_DATE = #keyDate:TIMESTAMP#
+  	  	</isNotNull>
+  	  	<isNotNull prepend="and" property="minuteValueStart" >
+  	  		MINUTE_VALUE >= #minuteValueStart#
+  	  	</isNotNull>
+  	  	<isNotNull prepend="and" property="minuteValueEnd" >
+  	  		<![CDATA[
+  	  			MINUTE_VALUE < #minuteValueEnd#
+  	  		]]>
+  	  	</isNotNull>
+  	</dynamic>
+  </select>
+</sqlMap>

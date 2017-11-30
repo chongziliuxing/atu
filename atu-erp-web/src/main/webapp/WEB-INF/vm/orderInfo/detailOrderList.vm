@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>结算管理页面</title>
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="/js/jquery.simplemodal.js"></script>
+		<script language="javascript" src="/My97DatePicker/WdatePicker.js"></script> 
+		<script type="text/javascript" src="/js/tab.js"></script>
+		
+		<link type="text/css" rel="stylesheet" href="/misc/css/admin.css">
+		<link type='text/css' rel="stylesheet" href='/misc/css/basic1.css'/>
+
+<style type="text/css">
+ .panel_grid table{
+  width:640px;
+ }
+</style>
+</head>
+<body>
+<!--盒子开始-->
+<form id="f1" name="f1" action="/orderInfo/detailOrderList" method="get">
+<div class="box"> 
+
+     <input id="orderStatus" type="hidden" name="orderStatus" value="$!{query.orderStatus}" />
+     <input id="balanceId" type="hidden" name="balanceId" value="$!{query.balanceId}" />
+    <!--查询区开始-->
+    
+    <div class="panel_search" style="display:none;">
+    	<table border="0" cellpadding="0" cellspacing="2" >
+    	     <tr>
+            	<td align="right" style="width:80px">
+                	订单号：
+                </td>
+                <td align="left" style="width:80px">
+                	<input type="text" id="orderId" name="orderId" value="$!query.orderId" />
+				</td>
+                <td align="right" style="width:80px">
+                	下单时间：
+                </td>
+                 <td align="left" style="width:250px">
+                	<input type="text" id="startTime" name="startTime" value="$!{dateFormatUtils.format($!query.startTime,'yyyy-MM-dd HH:mm:ss')}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />至
+                	<input type="text" id="endTime" name="endTime" value="$!{dateFormatUtils.format($!query.endTime,'yyyy-MM-dd HH:mm:ss')}" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+				</td>
+				<td><input type="submit" value="查询" /></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel_grid" width="640px">
+        <table>
+            <tr>
+                <th>订单编号</th>
+                <th>下单时间</th>
+                <th>计费时间</th>
+                <th>总货款</th> 
+                <th>佣金</th>
+                <th>操作</th>
+            </tr>
+            #foreach($orderInfo in $list)
+			<tr>
+                <td>$!orderInfo.orderId</td>
+                <td>
+                	$!{dateFormatUtils.format($orderInfo.orderTime)}
+                </td>
+               <td>
+                    $!{dateFormatUtils.format($orderInfo.payTime)}
+                </td>
+                <td>
+                	$!orderInfo.getBigDecimalOrderPrice()
+                </td>
+ 
+                <td>
+                	$!{orderInfo.commission}
+                </td> 
+                <td>
+                   <a href="/orderInfo/detail?orderId=${orderInfo.orderId}" target="_blank" >查看订单</a>
+                </td> 
+            </tr>
+			#end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">
+        #set($pageModule = $mainModule.getTarget("/balanceInfo/index").addQueryData("balanceStatus",$!{query.balanceStatus}).addQueryData("venderUserId",$!{query.venderUserId}).addQueryData("startTime",$!{dateFormatUtils.format($!query.startTime)}).addQueryData("endTime",$!{dateFormatUtils.format($!query.endTime)}).addQueryData("pageSize",$!query.pageSize).addQueryData("venderUserShopName",$!query.venderUserShopName).addQueryData("balanceId",$!query.balanceId))
+		#showPage($pageModule $list)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+</form>
+
+<script type="text/javascript">
+
+	function doAgree(balanceId, balanceStatus){
+		if(confirm("确认修改审核状态？")){
+			$.ajax({
+				type : "post",
+		    	url : "/balanceInfo/doAgree",
+		    	data : "balanceId="+balanceId+"&balanceStatus="+balanceStatus,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("修改成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	
+</script>
+ </body>
+</html>

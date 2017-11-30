@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ServiceInfo" >
+  <resultMap id="ServiceInfoResult" class="com.atu.erp.domain.ServiceInfo" >
+    <result column="service_id" property="serviceId" jdbcType="INTEGER" />
+    <result column="service_name" property="serviceName" jdbcType="VARCHAR" />
+    <result column="service_tel" property="serviceTel" jdbcType="VARCHAR" />
+    <result column="service_image" property="serviceImage" jdbcType="VARCHAR" />
+    <result column="category_id1" property="categoryId1" jdbcType="INTEGER" />
+     <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="yn" property="yn" jdbcType="TINYINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="selcondition" >
+    service_id, service_name, service_tel, service_image, category_id1,category_id, sort_number, yn, 
+    created, modified
+  </sql>
+   <!-- 精确查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="serviceId" >
+        service_id = #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="serviceName" >
+        service_name = #serviceName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="sortNumber" >
+        sort_number = #sortNumber:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+  
+    <delete id="deleteById" parameterClass="java.lang.Integer">
+    delete from service_info where service_id=#serviceId# 
+  </delete>
+<!--   <select id="selectByPrimaryKey" resultMap="ServiceInfoResult" parameterClass="java.lang.Integer" >
+    select 
+    <include refid="selcondition" />
+    from service_info
+    where service_id = #serviceId:INTEGER#
+  </select> -->
+<!--   <delete id="deleteByPrimaryKey" parameterClass="java.lang.Integer" >
+    delete from service_info
+    where service_id = #serviceId:INTEGER#
+  </delete> -->
+  <insert id="insert" parameterClass="com.atu.erp.domain.ServiceInfo" >
+    insert into service_info (service_name, service_tel, 
+      service_image, category_id1,category_id, sort_number, 
+      yn, created, modified
+      )
+    values (#serviceName:VARCHAR#, #serviceTel:VARCHAR#, 
+      #serviceImage:VARCHAR#, #categoryId1:INTEGER#, #categoryId:INTEGER#, #sortNumber:INTEGER#, 
+      #yn:TINYINT#, #created:TIMESTAMP#, #modified:TIMESTAMP#
+      )
+        <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="serviceId">
+			<![CDATA[SELECT @@IDENTITY AS service_id ]]>
+	  </selectKey>
+  </insert>
+    <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.ServiceInfoQuery" resultMap="ServiceInfoResult"  >
+    select 
+service_id, service_name, service_tel, service_image, category_id1,category_id, sort_number, yn, 
+    created, modified
+    from service_info
+    <include refid="ServiceInfo.condition" />
+    order by sort_number
+  </select>
+   
+ <!--  <insert id="insertSelective" parameterClass="com.atu.erp.domain.ServiceInfo" >
+    insert into service_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        service_id,
+      </if>
+      <if test="serviceName != null" >
+        service_name,
+      </if>
+      <if test="serviceTel != null" >
+        service_tel,
+      </if>
+      <if test="serviceImage != null" >
+        service_image,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="sortNumber != null" >
+        sort_number,
+      </if>
+      <if test="yn != null" >
+        yn,
+      </if>
+      <if test="created != null" >
+        created,
+      </if>
+      <if test="modified != null" >
+        modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serviceId != null" >
+        #serviceId:INTEGER#,
+      </if>
+      <if test="serviceName != null" >
+        #serviceName:VARCHAR#,
+      </if>
+      <if test="serviceTel != null" >
+        #serviceTel:VARCHAR#,
+      </if>
+      <if test="serviceImage != null" >
+        #serviceImage:VARCHAR#,
+      </if>
+      <if test="categoryId != null" >
+        #categoryId:INTEGER#,
+      </if>
+      <if test="sortNumber != null" >
+        #sortNumber:INTEGER#,
+      </if>
+      <if test="yn != null" >
+        #yn:TINYINT#,
+      </if>
+      <if test="created != null" >
+        #created:TIMESTAMP#,
+      </if>
+      <if test="modified != null" >
+        #modified:TIMESTAMP#,
+      </if>
+    </trim>
+  </insert> -->
+ <!--  <update id="updateByPrimaryKeySelective" parameterClass="com.atu.erp.domain.ServiceInfo" >
+    update service_info
+    <set >
+      <if test="serviceName != null" >
+        service_name = #serviceName:VARCHAR#,
+      </if>
+      <if test="serviceTel != null" >
+        service_tel = #serviceTel:VARCHAR#,
+      </if>
+      <if test="serviceImage != null" >
+        service_image = #serviceImage:VARCHAR#,
+      </if>
+      <if test="categoryId != null" >
+        category_id = #categoryId:INTEGER#,
+      </if>
+      <if test="sortNumber != null" >
+        sort_number = #sortNumber:INTEGER#,
+      </if>
+      <if test="yn != null" >
+        yn = #yn:TINYINT#,
+      </if>
+      <if test="created != null" >
+        created = #created:TIMESTAMP#,
+      </if>
+      <if test="modified != null" >
+        modified = #modified:TIMESTAMP#,
+      </if>
+    </set>
+    where service_id = #serviceId:INTEGER#
+  </update> -->
+<!--   <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.ServiceInfo" >
+    update service_info
+    set service_name = #serviceName:VARCHAR#,
+      service_tel = #serviceTel:VARCHAR#,
+      service_image = #serviceImage:VARCHAR#,
+      category_id = #categoryId:INTEGER#,
+      sort_number = #sortNumber:INTEGER#,
+      yn = #yn:TINYINT#,
+      created = #created:TIMESTAMP#,
+      modified = #modified:TIMESTAMP#
+    where service_id = #serviceId:INTEGER#
+  </update> -->
+</sqlMap>

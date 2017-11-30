@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>结算管理页面</title>
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="/js/jquery.simplemodal.js"></script>
+		<script language="javascript" src="/My97DatePicker/WdatePicker.js"></script> 
+		
+		<link type="text/css" rel="stylesheet" href="/misc/css/admin.css">
+		<link type='text/css' rel="stylesheet" href='/misc/css/basic1.css'/>
+		
+		<link rel="stylesheet" href="/css/tab.css" type="text/css" />
+   <script type="text/javascript">
+     function checkSubmit(){
+      var userId=$("#userId").val();
+       if(isNaN(userId)){
+         alert("用户编号只能为数字！");
+         $("#userId").val("");
+         return false;
+       }
+       var mobile=$("input[name=mobile]").val();
+       if(isNaN(mobile)){
+         alert("手机号只能为数字！");
+         $("#mobile").val("");
+         return false;
+       }
+         return true;
+     }
+   </script>
+</head>
+<body>
+<!--盒子开始-->
+<form id="f1" name="f1" method="get" onsubmit="return checkSubmit();">
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">禁言名单</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	禁言用户编号：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="userId" maxlength="30" id="userId" value="$!{query.userId}"/>
+				</td>
+                <td align="right" style="width:100px">
+                	禁言用户是手机号：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="mobile" maxlength="30" id="mobile" value="$!{query.mobile}"/>
+				</td>
+				<td lign="left" style="width:100px">
+                    <input type="submit" value="查询" />&nbsp;&nbsp;<input type="button" onclick="showAddForbiddenUsers();" value="添加禁言" /></td>
+            </tr>
+        </table>
+    </div>
+    <!--查询区结束--> 
+    <!--列表区开始-->
+    <div class="panel_grid">
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>禁言用户编号</th>
+                <th>禁言用户手机号</th> 
+                <th>禁言原因</th>
+                <th>操作时间</th>
+				<th>操作</th>
+            </tr>
+            #set($rowNum=${list.startRow}+(-1))
+            #foreach($forbidden in $list)
+            #set($rowNum=${rowNum}+1)
+			<tr>
+			    <td>${rowNum}</td>
+                <td>$!forbidden.userId</td>
+                <td>
+                	$!forbidden.mobile
+                </td>
+               <td>
+                	$!forbidden.reason
+                </td>
+               <td>
+                    $!{dateFormatUtils.format($forbidden.createTime, "yyyy-MM-dd")}
+                </td>
+				<td>
+					<a href="javascript:void(0);" onclick="unForbiddenUsers($!forbidden.forbiddenId)">解禁</a>
+				</td>
+            </tr>
+			#end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">
+        #set($pageModule = $mainModule.getTarget("/operation/blackList").addQueryData("mobile",$!{query.mobile}).addQueryData("userId",$!{query.userId}).addQueryData("pageSize",$!query.pageSize))
+		#showPage($pageModule $list)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+</form>
+<div id="addDialog" style="width: 95%; display:none;">
+<table style="border:none;height:200px;">
+<tr><td align="right">禁言用户ID</td><td><input type="text" id="forbiddenUserId" maxLength="11" value="" /></td></tr>
+<tr><td align="right">禁言原因</td><td><textarea id="forbiddenReason" cols="15" rows="3"></textarea></td></tr>
+<tr>
+<td align="center" colspan="2">
+ <input type="button" value="确认添加" onclick="addForbiddenUsers();"/>&nbsp;&nbsp;<input  type="button" onclick="$('.simplemodal-container').hide();$('.simplemodal-overlay').hide();" value="取消" />
+ </td>
+</tr>
+</table>
+
+</div>
+<script type="text/javascript">
+    function showSimpleModel(){
+        $('.simplemodal-container').show();
+	    $('.simplemodal-overlay').show();
+    }
+    function changeSimpleModelCss(width,height,top){
+        $("#simplemodal-container").css("width",width+"px");
+		$("#simplemodal-container").css("height",height+"px");
+		$("#simplemodal-container").css("top",top+"px");
+    }
+
+	function showAddForbiddenUsers(){
+	    showSimpleModel();
+		$('#addDialog').modal({});
+        changeSimpleModelCss(360,250,30);
+		return;
+	}
+	
+	function unForbiddenUsers(forbiddenId){
+		if(confirm("确实要对该用户解除禁言吗？")){
+			$.ajax({
+				type : "post",
+		    	url : "/operation/unForbiddenUsers",
+		    	data : "forbiddenId="+forbiddenId,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("解除禁言成功！");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	
+	function addForbiddenUsers(){
+	    var userId=$("#forbiddenUserId").val();
+	    var reason=$("#forbiddenReason").val();
+	    if(!userId){
+	      alert("请填写要禁言的用户ID");
+	      return ;
+	    }
+		if(confirm("确实要对该用户禁言吗？")){
+			$.ajax({
+				type : "post",
+		    	url : "/operation/addForbiddenUsers",
+		    	data : "userId="+userId+"&reason="+reason,
+		    	contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		    	dataType: "json", 
+		    	success : function(data) {
+		    		if(data.success){
+		    			alert("添加禁言用户成功");
+		    		}else{
+		    			alert(data.message);
+		    		}
+		    		window.location.reload();
+		    	}
+			});
+		}
+	}
+	
+
+</script>
+ </body>
+</html>

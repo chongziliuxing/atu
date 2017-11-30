@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Brand" >
+  <resultMap id="BrandResult" class="com.atu.erp.domain.Brand" >
+    <result column="brand_id" property="brandId"  />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <!-- 查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="brandId" >
+        brand_id = #brandId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="brandName" >
+        brand_name = #brandName:VARCHAR#
+      </isNotNull>
+    </dynamic>
+  </sql>
+  
+  
+<!-- 
+  <select id="selectByPrimaryKey" resultMap="BrandResult" parameterClass="java.lang.Integer" >
+    select category_id, category_name, category_level, parent_category_id, sort_number,
+      if_have_sale_property, yn, created, modified
+    from category
+    where category_id = #categoryId:INTEGER#
+  </select>
+ -->
+	
+  <delete id="delete" parameterClass="java.lang.Integer">
+    delete from brand where brand_id=#brandId# 
+  </delete>
+
+  <insert id="insert" parameterClass="com.atu.erp.domain.Brand" >
+    insert into brand (brand_name, created, modified)
+    values (#brandName:VARCHAR#, now(),now())
+      <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="brandId">
+			<![CDATA[SELECT @@IDENTITY AS brand_id ]]>
+	  </selectKey>
+  </insert>
+  
+<!-- 
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.Category" >
+    update category set modified = now()
+    <dynamic >
+      <isNotNull prepend="," property="categoryName" >
+        category_name = #categoryName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryLevel" >
+        category_level = #categoryLevel:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="parentCategoryId" >
+        parent_category_id = #parentCategoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="sortNumber" >
+        sort_number = #sortNumber:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ifHaveSaleProperty" >
+        if_have_sale_property = #ifHaveSaleProperty:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+    where category_id = #categoryId:INTEGER#
+  </update>
+  
+  <select id="countByCondition" parameterClass="com.atu.erp.domain.query.CategoryQuery" resultClass="java.lang.Integer" >
+    select count(1) from category
+    <include refid="Category.condition" />
+    order by sort_number
+  </select>
+ -->
+  <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.BrandQuery" resultMap="BrandResult"  >
+    select brand_id, brand_name, created, modified
+    from brand
+    <include refid="Brand.condition" />
+    order by brand_id
+  </select>
+  
+  <select id="selectByConditionForPage" parameterClass="com.atu.erp.domain.query.BrandQuery" resultMap="BrandResult"  >
+    select brand_id, brand_name, created, modified
+    from brand
+    <include refid="Brand.condition" />
+    order by sort_number
+  	limit #start#,#pageSize#
+  </select>
+ 
+</sqlMap>

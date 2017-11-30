@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>订单管理页面</title>
+		<link type="text/css" rel="stylesheet" href="/misc/css/admin.css"/>
+		<link type="text/css" rel="stylesheet" href="/misc/css/basic1.css"/>
+		
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+		<script language="javascript" src="/js/jquery.simplemodal.js"></script>
+		<script language="javascript" src="/My97DatePicker/WdatePicker.js"></script> 
+		
+</head>
+<body>
+<!--盒子开始-->
+<form id="f1" name="f1" method="get"  onsubmit="return checkSubmit();">
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">订单管理</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+            <tr>
+                <td align="right" style="width:100px">
+                	订单编号：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="orderId" maxlength="30" id="orderId" value="$!{query.orderId}"/>
+				</td>
+				<td align="right" style="width:100px">
+                	下单时间：
+                </td>
+                <td align="left" style="width:250px">
+                	<input type="text" id="startTime" name="startTime" value="$!{dateFormatUtils.format($!query.startTime)}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />至
+                	<input type="text" id="endTime" name="endTime" value="$!{dateFormatUtils.format($!query.endTime)}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+				</td>
+            </tr>
+			 <tr>
+			   <td align="right" style="width:100px">
+                	订单状态：
+                </td>
+                <td align="left" style="width:100px">
+					<select name="orderStatus" id="orderStatus" style="width: 140px">
+						<option value="">全部</option>
+						<option #if($!query.orderStatus==0)selected="selected"#end value="0">新建订单</option>
+						<option #if($!query.orderStatus==1)selected="selected"#end value="1">支付完成</option>
+						<!--<option #if($!query.orderStatus==2)selected="selected"#end value="2">确认收款</option>-->
+						<!--<option #if($!query.orderStatus==3)selected="selected"#end value="3">尾款支付完成</option>-->
+						<!--<option #if($!query.orderStatus==4)selected="selected"#end value="4">确认尾款</option>-->
+						<option #if($!query.orderStatus==5)selected="selected"#end value="5">商家发货确认</option>
+						<option #if($!query.orderStatus==6)selected="selected"#end value="6">用户收货确认</option>
+						<option #if($!query.orderStatus==50)selected="selected"#end value="50">订单完成</option>
+					</select>
+				</td>
+				<td align="right" style="width:100px">
+                	订单金额：
+                </td>
+                <td align="left" style="width:250px">
+                	<input type="text" id="priceStart" name="priceStart" value="$!query.priceStart" />至
+                	<input type="text" id="priceEnd" name="priceEnd" value="$!query.priceEnd" />
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	买家ID：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="userId" maxlength="30" id="userId" value="$!{query.userId}"/>
+				</td>
+            	<td align="right" style="width:100px">
+                	收货人手机号：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="orderConsignee.consigneeMobile" maxlength="30" id="consigneeMobile" value="$!{query.orderConsignee.consigneeMobile}"/>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	商家ID：
+                </td>
+                <td align="left" style="width:100px">
+					<input type="text" name="venderUserId" maxlength="30" id="venderUserId" value="$!{query.venderUserId}"/>
+				</td>
+            	<td align="right" style="width:100px">
+                	支付方式：
+                </td>
+                <td align="left" style="width:100px">
+					<select name="orderType" id="orderType" style="width: 140px">
+						<option #if($!query.orderType==1)selected="selected"#end value="1">线上支付</option>
+						<option #if($!query.orderType==2)selected="selected"#end value="2">线下支付</option>
+						<option #if($!query.orderType==3)selected="selected"#end value="3">货到付款</option>
+					</select>&nbsp;&nbsp;
+					<input type="submit" value="查询" />&nbsp;&nbsp;
+					<input type="button" onclick="doExcel();" value="导出查询结果" />
+				</td>
+            </tr>
+        </table>
+    </div><br/>
+    <!--查询区结束--> 
+    <!--列表区开始-->
+    <div class="panel_grid">
+        <table>
+            <tr>
+                <th>订单号</th>
+                <th>订单状态</th> 
+                <th>商品信息</th> 
+                <th>总订单金额</th>
+                <th>买家ID</th>
+                <th>商家家ID</th>
+                <th>收货人</th>
+                <th>下单时间</th>
+				<th>操作</th>
+            </tr>
+            
+            #foreach($orderInfo in $list)
+			<tr id="$!orderInfo.orderId">
+                <td>$!orderInfo.orderId</td>
+                <td>
+                	#if($!orderInfo.orderStatus==0)
+                		新建订单
+                	#end
+                	#if($!orderInfo.orderStatus==0 && $!orderInfo.orderType==3)
+                		等待发货
+                	#end
+                	#if($!orderInfo.orderStatus==1)
+                		支付完成
+                	#end
+                	#if($!orderInfo.orderStatus==2)
+                		确认收款
+                	#end
+                	#if($!orderInfo.orderStatus==3)
+                		尾款支付完成
+                	#end
+                	#if($!orderInfo.orderStatus==4)
+                		确认尾款
+                	#end
+                	#if($!orderInfo.orderStatus==5)
+                		商家发货确认
+                	#end
+                	#if($!orderInfo.orderStatus==6)
+                		用户收货确认
+                	#end
+                	#if($!orderInfo.orderStatus==7)
+                		等待支付尾款
+                	#end
+                	#if($!orderInfo.orderStatus==50)
+                		订单完成
+                	#end
+                	#if($!orderInfo.orderStatus==51)
+                		已取消订单
+                	#end
+                </td> 
+                <td style="text-align:left;">
+                    #foreach($orderDetail in $orderInfo.orderDetail)
+                     &nbsp;$!orderDetail.itemName
+            		#foreach($salesPropertyName in $!orderDetail.getSalesPropertyNameList())
+            			-$salesPropertyName 
+            		#end（$!orderDetail.num）；
+            		<br/>
+            		#end
+                </td> 
+
+                <td>
+                	订单金额：$!orderInfo.getBigDecimalOrderPrice()<br />
+                	<!-- 应付金额：$!orderInfo.oughtPayMoney<br /> -->
+                	优惠金额：$!orderInfo.discountMoney<br />
+                	实付金额：$!orderInfo.payMoney<br />
+                </td>
+                <td>$!orderInfo.userId</td>
+                <td>$!orderInfo.venderUserId</td>
+                <td>
+                	#if($orderInfo.orderConsigneeList.size() == 1)
+                		#foreach($orderConsignee in $orderInfo.orderConsigneeList)
+                			$!orderConsignee.consigneeName<br/>$!orderConsignee.consigneeMobile
+                		#end
+                	#else
+                		收货人为多个地址
+                	#end
+                </td>
+                <td>$!{dateFormatUtils.format($orderInfo.orderTime)}</td>
+				<td>
+					<a href="javascript:void(0);" onclick="detail($!orderInfo.orderId);">【查看详情】</a><br />
+					
+					#if($!orderInfo.orderType == 2 &&  $!orderInfo.orderStatus == 0)
+						<a href="javascript:void(0);" onclick="linePayment($!orderInfo.orderId);">【线下支付】</a><br />
+					#end
+				</td>
+            </tr>
+			#end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">
+        #set($pageModule = $mainModule.getTarget("/orderInfo/index").addQueryData("orderId",$!{query.orderId}).addQueryData("orderStatus",$!{query.orderStatus}).addQueryData("priceEnd",$!{query.priceEnd}).addQueryData("priceStart",$!{query.priceStart}).addQueryData("startTime",$!{dateFormatUtils.format($!query.startTime)}).addQueryData("endTime",$!{dateFormatUtils.format($!query.endTime)}).addQueryData("userId",$!{query.userId}).addQueryData("venderUserId",$!{query.venderUserId}).addQueryData("orderType",$!{query.orderType}).addQueryData("orderConsignee.consigneeMobile",$!{query.orderConsignee.consigneeMobile}))
+		#showPage($pageModule $list)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+</form>
+<div id="addDialog" style="width: 95%; display:none;">
+			
+</div>	
+
+<script type="text/javascript">
+    function showSimpleModel(){
+        $('.simplemodal-container').show();
+	    $('.simplemodal-overlay').show();
+
+    }
+    function changeSimpleModelCss(width,height,top){
+        $("#simplemodal-container").css("width",width+"px");
+		$("#simplemodal-container").css("height",height+"px");
+		if(top){
+		$("#simplemodal-container").css("top",top+"px");
+		}
+		$('.simplemodal-close').css("margin-top","20px");
+	    $('.simplemodal-close').css("margin-right","20px");
+    }
+    
+    function checkSubmit(){
+	    var orderId=$("#orderId").val();
+	    var userId=$("#userId").val();
+      	var venderUserId=$("#venderUserId").val();
+      	
+        if(isNaN(orderId)){
+          alert("订单编号只能为数字！");
+          $("#orderId").val("");
+          $("#orderId").focus();
+          return false;
+        }
+        if(isNaN(userId)){
+          alert("买家ID只能为数字！");
+          $("#userId").val("");
+          $("#userId").focus();
+          return false;
+        }
+        if(isNaN(venderUserId)){
+          alert("商家ID只能为数字！");
+          $("#venderUserId").val("");
+          $("#venderUserId").focus();
+          return false;
+        }
+        return true;
+	}
+    
+	function detail(orderId){
+	    showSimpleModel();
+	    $("#addDialog").html("");
+	    jQuery.get("/orderInfo/detail?orderId="+orderId+"&x="+new Date().getMilliseconds(), function(result){
+        	$("#addDialog").html(result);
+        });
+  
+		$('#addDialog').modal({
+		});
+		changeSimpleModelCss(750,430,20);
+		return;
+	};
+	
+	function linePayment(orderId){
+	  showSimpleModel();
+	  jQuery.get("/orderInfo/linePayment?orderId="+orderId, function(result){
+        $("#addDialog").html(result);
+      });
+  
+		$('#addDialog').modal({
+		});
+		changeSimpleModelCss(750,430,20);
+		return;
+	};
+	
+	//导出Excel
+	function doExcel(){
+		window.location.href="/orderInfo/excel?orderId="+$("#orderId").val()+"&startTime="+$("#startTime").val()+"&endTime="+$("#endTime").val()+"&orderStatus="+$("#orderStatus").val()+"&priceStart="+$("#priceStart").val()+"&priceEnd="+$("#priceEnd").val()+"&userId="+$("#userId").val()+"&venderUserId="+$("#venderUserId").val()+"&orderType="+$("#orderType").val()+"&consigneeMobile="+$("#consigneeMobile").val();
+	}
+</script>
+ </body>
+</html>

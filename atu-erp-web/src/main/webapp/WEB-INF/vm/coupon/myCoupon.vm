@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>我的优惠券</title>
+        
+        <script language="javascript" src="/js/jquery-1.6.2.min.js"></script>
+        <script language="javascript" src="/js/jquery.simplemodal.js"></script>
+		<script language="javascript" src="$assetModule.getTarget("/js/coupon/coupon.js")"></script>
+		<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script> 
+		<link type="text/css" rel="stylesheet" href="/misc/css/admin.css"/>
+		<link type='text/css' rel="stylesheet" href='/misc/css/basic1.css'/>
+		
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl" onclick="myCoupon()">
+            	我的优惠券
+            </div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--查询区开始-->
+    <form id="f1">
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+    	     <tr>
+            	<td align="right" style="width:100px">
+                	发放业务：
+                </td>
+                <td align="left" style="width:100px">
+                	<select name="couponBusinessType"  style="width: 130px">
+                		<option  value="">--请选择--</option>
+						<option  #if($!resultMap.tbCouponPromoQuery.couponBusinessType==1) selected="selected" #end value="1">直接发放账号</option>
+						<option  #if($!resultMap.tbCouponPromoQuery.couponBusinessType==2) selected="selected" #end value="2">用户行为相关</option>
+						<option  #if($!resultMap.tbCouponPromoQuery.couponBusinessType==3) selected="selected" #end value="3">通过链接领取</option>
+					</select>
+				</td>
+				<td align="right" style="width:100px">
+                	活动有效时间：
+                </td>
+                <td align="left" style="width:400px">
+                	<input type="text" name="couponValidStarttime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!resultMap.tbCouponPromoQuery.couponValidStarttime,'yyyy-MM-dd')}" />至
+                    <input type="text" name="couponValidEndtime"  onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" value="$!{dateFormatUtils.format($!resultMap.tbCouponPromoQuery.couponValidEndtime,'yyyy-MM-dd')}" />
+					<input type="button" value="查询" id="query"/>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	活动编号：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text"  name="couponPromoCode" value="$!resultMap.tbCouponPromoQuery.couponPromoCode" />
+				</td>
+				<td align="right" style="width:100px">
+                	券类型：
+                </td>
+                <td align="left" style="width:400px">
+                	<select id="couponType" name="couponType"  style="width: 130px">
+                		<option  value="">--请选择--</option>
+						<option #if($!resultMap.tbCouponPromoQuery.couponType==0) selected="selected" #end value="0">满减券</option>
+						<option #if($!resultMap.tbCouponPromoQuery.couponType==1) selected="selected" #end value="1">直减券</option>
+						<!-- <option #if($!resultMap.tbCouponPromoQuery.couponType==2) selected="selected" #end value="2">免运费券</option> -->
+					</select>
+				</td>
+            </tr>
+            <tr>
+            	<td align="right" style="width:100px">
+                	活动名称：
+                </td>
+                <td align="left" style="width:100px">
+                	<input type="text"  id="couponPromoName" name="couponPromoName" value="$!resultMap.tbCouponPromoQuery.couponPromoName" />
+				</td>
+				<td align="right" style="width:100px">
+                	活动状态：
+                </td>
+                <td align="left" style="width:400px">
+                	<input type="radio" name="couponPromoState" #if($!resultMap.tbCouponPromoQuery.couponPromoState==0) checked="checked" #end value="0"/>待上线
+                	<input type="radio" name="couponPromoState" #if($!resultMap.tbCouponPromoQuery.couponPromoState==1) checked="checked" #end value="1"/>正在进行
+                	<input type="radio" name="couponPromoState" #if($!resultMap.tbCouponPromoQuery.couponPromoState==2) checked="checked" #end value="2"/>已结束
+                	<input type="radio" name="couponPromoState" #if($!resultMap.tbCouponPromoQuery.couponPromoState==3) checked="checked" #end value="3"/>已过期
+				</td>
+            </tr>
+        </table>
+    </div>
+    </form>
+    <!--查询区结束--> 
+    <div class="panel_grid">
+        <table>
+            <tr>
+                <th>序号</th>
+                <th>活动编号</th>
+                <th>业务类型</th>
+                <th>活动名称</th>
+                <th>券类型/面值</th>
+                <th>申请数量</th>
+                <th>已发放数量</th>
+                <th>有效期时间</th>
+                <th>创建申请时间</th>
+                <th>申请结束时间</th>
+                <th>活动状态</th>
+                <th>操作</th>
+            </tr>
+            #foreach($coupon in $resultMap.tbCouponPromoList)
+				<tr  id="$!coupon.couponPromoId">
+				    <td>$!coupon.couponPromoId</td>
+	             	<td>$!coupon.couponPromoCode</td>
+	                <td>
+	                	#if($!coupon.couponBusinessType==1)
+                				直接发放账号
+                		#end
+                		#if($!coupon.couponBusinessType==2)
+                				用户行为相关
+                		#end
+                		#if($!coupon.couponBusinessType==3)
+                				通过链接领取
+                		#end
+	                </td>
+	                <td>$!coupon.couponPromoName</td>
+	                <td>
+	                	#if($!coupon.couponType==0)
+                				满减券$!coupon.orderQuota - $!coupon.couponAmount
+                		#end
+                		#if($!coupon.couponType==1)
+                				直减券$!coupon.couponAmount
+                		#end
+                		#if($!coupon.couponType==2)
+                				免运费券
+                		#end
+	                </td>
+	                <td>$!coupon.couponApplyAmount</td>
+	                <td>$!coupon.couponGrantAmount</td>
+	                <td>$!coupon.couponValidDays</td>
+	                <td>$!{dateFormatUtils.format($!coupon.applyTime)}</td>
+	                <td>$!{dateFormatUtils.format($!coupon.promoEndtime,'yyyy-MM-dd')}</td>
+	                <td>
+	                	#if( $!coupon.couponPromoState==0)
+                				待上线
+                		#end
+                		#if( $!coupon.couponPromoState==1)
+                				正在进行
+                		#end
+                		#if( $!coupon.couponPromoState==2)
+                				已结束
+                		#end
+                		#if( $!coupon.couponPromoState==3)
+                				已过期
+                		#end
+	                </td>
+	                <td>
+	                	#if ($!coupon.couponPromoState==0)
+		                	<a href="javascript:void(0);" onclick="online($coupon.couponPromoId)">上线</a>
+		                	<a href="javascript:void(0);" onclick="detail($coupon.couponPromoId)">【查看详情】</a>
+		                	<a href="javascript:void(0);" onclick="toUpdate($coupon.couponPromoId)">修改</a>
+		                	<a href="javascript:void(0);" onclick="addNum($coupon.couponPromoId)">追加</a>
+                		#elseif ($!coupon.couponPromoState==1 and $!coupon.couponBusinessType == 3)
+                			<a href="javascript:void(0);" onclick="offline($coupon.couponPromoId)">下线</a>
+		                	<a href="javascript:void(0);" onclick="detail($coupon.couponPromoId)">【查看详情】</a>
+		                	<a href="javascript:void(0);" onclick="addNum($coupon.couponPromoId)">追加</a>
+		                	<a href="javascript:void(0);" onclick="getLink($coupon.couponPromoId)">获取链接</a>
+                		#elseif ($!coupon.couponPromoState==1)
+                			<a href="javascript:void(0);" onclick="offline($coupon.couponPromoId)">下线</a>
+		                	<a href="javascript:void(0);" onclick="detail($coupon.couponPromoId)">【查看详情】</a>
+		                	<a href="javascript:void(0);" onclick="addNum($coupon.couponPromoId)">追加</a>
+                		#elseif ($!coupon.couponPromoState==2)
+		                	<a href="javascript:void(0);" onclick="detail($coupon.couponPromoId)">【查看详情】</a>
+		                #elseif ($!coupon.couponPromoState==3)
+		                	<a href="javascript:void(0);" onclick="detail($coupon.couponPromoId)">【查看详情】</a>
+                		#end
+	                </td>
+	            </tr>
+            #end
+        </table>
+        <!--分页控件开始-->
+        <div class="pager">                      					 																
+        #set($pageModule = $mainModule.getTarget("/coupon/myCoupon").addQueryData("couponBusinessType",$resultMap.tbCouponPromoQuery.couponBusinessType).addQueryData("couponPromoCode",$resultMap.tbCouponPromoQuery.couponPromoCode).addQueryData("couponType",$resultMap.tbCouponPromoQuery.couponType).addQueryData("couponPromoName",$resultMap.tbCouponPromoQuery.couponPromoName).addQueryData("couponPromoState",$resultMap.tbCouponPromoQuery.couponPromoState).addQueryData("promoStarttime",$!{dateFormatUtils.format($resultMap.tbCouponPromoQuery.promoStarttime)}).addQueryData("promoEndtime",$!{dateFormatUtils.format($resultMap.tbCouponPromoQuery.promoEndtime)}))
+		#showPage($pageModule $resultMap.tbCouponPromoList)
+        </div>
+        <!--分页控件结束--> 
+    </div>
+    <!--列表区结束--> 
+</div>
+<!--盒子结束--> 
+<div id="addDialog" style="width: 95%; display:none;"></div>
+ </body>
+</html>

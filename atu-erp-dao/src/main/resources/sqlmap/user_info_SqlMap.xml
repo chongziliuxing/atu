@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_info" >
+  <resultMap id="UserInfoResult" class="com.atu.erp.domain.UserInfo" >
+    <result column="user_id" property="userId" />
+    <result column="mobile" property="mobile"/>
+    <result column="password" property="password" />
+    <result column="user_type" property="userType"  />
+    <result column="register_time" property="registerTime"  />
+    <result column="register_ip" property="registerIp" />
+    <result column="last_login_time" property="lastLoginTime"  />
+    <result column="last_login_ip" property="lastLoginIp" />
+    <result column="yn" property="yn" />
+    <result column="level" property="level" />
+    <result column="created" property="created"/>
+    <result column="modified" property="modified" />
+  </resultMap>
+  
+  <resultMap id="UserInfoQueryResult" class="com.atu.erp.domain.query.UserInfoQuery" >
+    <result column="user_id" property="userId" />
+    <result column="mobile" property="mobile"/>
+    <result column="password" property="password" />
+    <result column="user_type" property="userType"  />
+    <result column="register_time" property="registerTime"  />
+    <result column="register_ip" property="registerIp" />
+    <result column="last_login_time" property="lastLoginTime"  />
+    <result column="last_login_ip" property="lastLoginIp" />
+    <result column="yn" property="yn" />
+    <result column="level" property="level" />
+    <result column="created" property="created"/>
+    <result column="modified" property="modified" />
+  </resultMap>
+  
+  <sql id="UserInfoCondition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="userId" >
+  	   USER_ID = #userId:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="mobile" >
+  	   mobile = #mobile:VARCHAR#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="password" >
+  	   PASSWORD = #password:VARCHAR#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="userType" >
+  	   USER_TYPE = #userType:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="yn" >
+  	   YN = #yn:INTEGER#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="registerTime" >
+  	   REGISTER_TIME = #registerTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="registerIp" >
+  	   REGISTER_IP = #registerIp:VARCHAR#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="lastLoginTime" >
+  	   LAST_LOGIN_TIME = #lastLoginTime:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="lastLoginIp" >
+  	   LAST_LOGIN_IP = #lastLoginIp:VARCHAR#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="level" >
+        level = #level#
+      </isNotNull>
+  	  <isNotNull prepend="and" property="created" >
+  	   CREATED = #created:TIMESTAMP#
+  	  </isNotNull>
+  	  <isNotNull prepend="and" property="modified" >
+  	   MODIFIED = #modified:TIMESTAMP#
+  	  </isNotNull>
+  	 </dynamic>
+  </sql>	
+
+
+  <select id="selectByPrimaryKey" resultMap="UserInfoResult" parameterClass="com.atu.erp.domain.UserInfo" >
+    select user_id, mobile, password, user_type, register_time, register_ip,last_login_time,
+      last_login_ip, yn,level,created, modified
+    from user_info
+    where user_id = #userId:INTEGER#
+  </select>
+
+  <select id="query" resultMap="UserInfoResult" parameterClass="java.util.Map" >
+    select user_id, mobile, password, user_type, register_time, register_ip, last_login_time,
+      last_login_ip, yn,level,created, modified
+    from user_info
+    where mobile = #mobile# and password = #password#
+  </select>
+  
+  <select id="queryById" resultMap="UserInfoResult" parameterClass="java.lang.Integer" >
+    select user_id, mobile, password, user_type, register_time, register_ip, last_login_time,
+      last_login_ip, yn, level, created, modified
+    from user_info
+    where user_id=#userId#
+  </select>
+  
+  <select id="queryByMobile" resultMap="UserInfoResult" parameterClass="java.lang.String" >
+    select user_id, mobile, password, user_type, register_time, register_ip, last_login_time,
+      last_login_ip, yn, level, created, modified
+    from user_info
+    where mobile = #mobile#
+  </select>
+
+  <!-- 新建用户  -->
+  <insert id="addUser" parameterClass="com.atu.erp.domain.UserInfo" >
+    insert into user_info (mobile, password, user_type,register_time, register_ip,
+      last_login_time, last_login_ip, yn,level, created, modified)
+    values ( #mobile#, #password#,
+      #userType#, now(), #registerIp#, #lastLoginTime#,
+      #lastLoginIp#, #yn#,#level#, now(),now())
+      <selectKey resultClass="java.lang.Integer" keyProperty="userId">
+      	<![CDATA[SELECT @@IDENTITY AS user_id]]>
+      </selectKey>
+  </insert>
+	<!-- 更改用户信息 -->
+  <update id="updateUser" parameterClass="com.atu.erp.domain.UserInfo" >
+    update user_info set modified = now()
+    <dynamic>
+      <isNotNull prepend="," property="mobile" >
+  	   mobile = #mobile#
+  	  </isNotNull>
+      <isNotNull prepend="," property="password" >
+        password = #password#
+      </isNotNull>
+      <isNotNull prepend="," property="userType" >
+        user_type = #userType#
+      </isNotNull>
+      <isNotNull prepend="," property="registerTime" >
+        register_time = #registerTime#
+      </isNotNull>
+      <isNotNull prepend="," property="registerIp" >
+        register_ip = #registerIp#
+      </isNotNull>
+      <isNotNull prepend="," property="lastLoginTime" >
+        last_login_time = #lastLoginTime#
+      </isNotNull>
+      <isNotNull prepend="," property="lastLoginIp" >
+        last_login_ip = #lastLoginIp#
+      </isNotNull>
+      <isNotNull prepend="," property="yn" >
+        yn = #yn#
+      </isNotNull>
+      <isNotNull prepend="," property="level" >
+        level = #level#
+      </isNotNull>
+      <isNotNull prepend="," property="created" >
+        created = #created#
+      </isNotNull>
+      <isNotNull prepend="," property="modified" >
+        modified = now()
+      </isNotNull>
+    </dynamic>
+    where user_id = #userId#
+  </update>
+  
+<select id="countByCondition" parameterClass="com.atu.erp.domain.query.UserInfoQuery" resultClass="java.lang.Integer" >
+    select count(1) from user_info
+    <dynamic prepend="where" >
+      <isNotNull prepend="and" property="userId" >
+        user_id = #userId#
+      </isNotNull>
+      <isNotNull prepend="and" property="mobile" >
+        mobile like CONCAT('%', #mobile#, '%')
+      </isNotNull>
+      <isNotNull prepend="and" property="password" >
+        password = #password#
+      </isNotNull>
+      <isNotNull prepend="and" property="userType" >
+        user_type = #userType#
+      </isNotNull>
+      <isNotNull prepend="and" property="registerTime" >
+        register_time = #registerTime#
+      </isNotNull>
+      <isNotNull prepend="and" property="registerIp" >
+        register_ip = #registerIp#
+      </isNotNull>
+      <isNotNull prepend="and" property="lastLoginTime" >
+        last_login_time = #lastLoginTime#
+      </isNotNull>
+      <isNotNull prepend="and" property="lastLoginIp" >
+        last_login_ip = #lastLoginIp#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn#
+      </isNotNull>
+      <isNotNull prepend="and" property="level" >
+        level = #level#
+      </isNotNull>
+    </dynamic>
+  </select>
+  
+  <select id="selectByUserInfoCondition" parameterClass="com.atu.erp.domain.query.UserInfoQuery" resultMap="UserInfoResult" >
+    select 
+    USER_ID,mobile,PASSWORD,USER_TYPE,YN,REGISTER_TIME,REGISTER_IP,LAST_LOGIN_TIME,LAST_LOGIN_IP,level,CREATED,MODIFIED
+    from user_info
+    <include refid="user_info.UserInfoCondition" />
+  </select>
+  
+  <select id="selectByConditionWithPage" parameterClass="com.atu.erp.domain.query.UserInfoQuery" resultMap="UserInfoQueryResult" >
+    select user_id, mobile, password, user_type, register_time, register_ip, last_login_time,
+      last_login_ip, yn,level, created, modified
+    from user_info
+      <dynamic prepend="where" >
+      <isNotNull prepend="and" property="userId" >
+        user_id = #userId#
+      </isNotNull>
+      <isNotNull prepend="and" property="mobile" >
+        mobile like CONCAT('%', #mobile#, '%')
+      </isNotNull>
+      <isNotNull prepend="and" property="password" >
+        password = #password#
+      </isNotNull>
+      <isNotNull prepend="and" property="userType" >
+        user_type = #userType#
+      </isNotNull>
+      <isNotNull prepend="and" property="registerTime" >
+        register_time = #registerTime#
+      </isNotNull>
+      <isNotNull prepend="and" property="registerIp" >
+        register_ip = #registerIp#
+      </isNotNull>
+      <isNotNull prepend="and" property="lastLoginTime" >
+        last_login_time = #lastLoginTime#
+      </isNotNull>
+      <isNotNull prepend="and" property="lastLoginIp" >
+        last_login_ip = #lastLoginIp#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn#
+      </isNotNull>
+      <isNotNull prepend="and" property="level" >
+        level = #level#
+      </isNotNull>
+      <isNotNull prepend="and" property="created" >
+        created = #created#
+      </isNotNull>
+      <isNotNull prepend="and" property="modified" >
+        modified = now()
+      </isNotNull>
+    </dynamic>
+    order by USER_ID desc
+  	limit #start#,#pageSize#
+  </select>
+ 
+</sqlMap>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ServiceCategory" >
+  <resultMap id="ServiceCategoryResult" class="com.atu.erp.domain.ServiceCategory" >
+     <result column="category_id" property="categoryId"  />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="category_level" property="categoryLevel" jdbcType="TINYINT" />
+    <result column="parent_category_id" property="parentCategoryId" jdbcType="INTEGER" />
+    <result column="sort_number" property="sortNumber" jdbcType="INTEGER" />
+    <result column="yn" property="yn" jdbcType="TINYINT" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
+    <result column="modified" property="modified" jdbcType="TIMESTAMP" />
+  </resultMap>
+<!--   <sql id="condition" >
+    category_id, category_name, category_level, parent_category_id, sort_number, yn, 
+    created, modified
+  </sql> -->
+    <!-- 精确查询条件 -->
+  <sql id="condition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="categoryId" >
+        category_id = #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="categoryName" >
+        category_name = #categoryName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="and" property="categoryLevel" >
+        category_level = #categoryLevel:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="parentCategoryId" >
+        parent_category_id = #parentCategoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="sortNumber" >
+        sort_number = #sortNumber:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+      <!-- 模糊查询条件 -->
+  <sql id="likeCondition" >
+  	<dynamic prepend="where" >
+  	  <isNotNull prepend="and" property="categoryId" >
+        category_id = #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="categoryName" >
+        category_name like '%$categoryName$%'
+      </isNotNull>
+      <isNotNull prepend="and" property="categoryLevel" >
+        category_level = #categoryLevel:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="parentCategoryId" >
+        parent_category_id = #parentCategoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="sortNumber" >
+        sort_number = #sortNumber:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="and" property="yn" >
+        yn = #yn:INTEGER#
+      </isNotNull>
+    </dynamic>
+  </sql>
+  <select id="selectByLikeCondition" parameterClass="com.atu.erp.domain.query.ServiceCategoryQuery" resultMap="ServiceCategoryResult"  >
+    select category_id, category_name, category_level, parent_category_id, sort_number, yn, created, modified
+    from service_category
+    <include refid="ServiceCategory.likeCondition" />
+    order by sort_number
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ServiceCategoryResult" parameterClass="java.lang.Integer" >
+    select 
+    <include refid="ServiceCategory.condition" />
+    from service_category
+    where category_id = #categoryId:INTEGER#
+  </select>
+  <delete id="deleteByPrimaryKey" parameterClass="java.lang.Integer" >
+    delete from service_category
+    where category_id = #categoryId:INTEGER#
+  </delete>
+  <insert id="insert" parameterClass="com.atu.erp.domain.ServiceCategory" >
+    insert into service_category (category_name, category_level, 
+      parent_category_id, sort_number, yn, 
+      created, modified)
+    values (#categoryName:VARCHAR#, #categoryLevel:TINYINT#, 
+      #parentCategoryId:INTEGER#, #sortNumber:INTEGER#, #yn:TINYINT#, 
+      #created:TIMESTAMP#, #modified:TIMESTAMP#)
+            <!-- 返回自增主键 -->
+      <selectKey resultClass="java.lang.Integer" keyProperty="categoryId">
+			<![CDATA[SELECT @@IDENTITY AS category_id ]]>
+	  </selectKey>
+  </insert>
+  <!-- <insert id="insertSelective" parameterClass="com.atu.erp.domain.ServiceCategory" >
+    insert into service_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="categoryName != null" >
+        category_name,
+      </if>
+      <if test="categoryLevel != null" >
+        category_level,
+      </if>
+      <if test="parentCategoryId != null" >
+        parent_category_id,
+      </if>
+      <if test="sortNumber != null" >
+        sort_number,
+      </if>
+      <if test="yn != null" >
+        yn,
+      </if>
+      <if test="created != null" >
+        created,
+      </if>
+      <if test="modified != null" >
+        modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="categoryId != null" >
+        #categoryId:INTEGER#,
+      </if>
+      <if test="categoryName != null" >
+        #categoryName:VARCHAR#,
+      </if>
+      <if test="categoryLevel != null" >
+        #categoryLevel:TINYINT#,
+      </if>
+      <if test="parentCategoryId != null" >
+        #parentCategoryId:INTEGER#,
+      </if>
+      <if test="sortNumber != null" >
+        #sortNumber:INTEGER#,
+      </if>
+      <if test="yn != null" >
+        #yn:TINYINT#,
+      </if>
+      <if test="created != null" >
+        #created:TIMESTAMP#,
+      </if>
+      <if test="modified != null" >
+        #modified:TIMESTAMP#,
+      </if>
+    </trim>
+  </insert> -->
+ <!--  <update id="updateByPrimaryKeySelective" parameterClass="com.atu.erp.domain.ServiceCategory" >
+    update service_category
+    <set >
+      <if test="categoryName != null" >
+        category_name = #categoryName:VARCHAR#,
+      </if>
+      <if test="categoryLevel != null" >
+        category_level = #categoryLevel:TINYINT#,
+      </if>
+      <if test="parentCategoryId != null" >
+        parent_category_id = #parentCategoryId:INTEGER#,
+      </if>
+      <if test="sortNumber != null" >
+        sort_number = #sortNumber:INTEGER#,
+      </if>
+      <if test="yn != null" >
+        yn = #yn:TINYINT#,
+      </if>
+      <if test="created != null" >
+        created = #created:TIMESTAMP#,
+      </if>
+      <if test="modified != null" >
+        modified = #modified:TIMESTAMP#,
+      </if>
+    </set>
+    where category_id = #categoryId:INTEGER#
+  </update> -->
+  <update id="updateByPrimaryKey" parameterClass="com.atu.erp.domain.ServiceCategory" >
+    update service_category
+    set category_name = #categoryName:VARCHAR#,
+      category_level = #categoryLevel:TINYINT#,
+      parent_category_id = #parentCategoryId:INTEGER#,
+      sort_number = #sortNumber:INTEGER#,
+      yn = #yn:TINYINT#,
+      created = #created:TIMESTAMP#,
+      modified = #modified:TIMESTAMP#
+    where category_id = #categoryId:INTEGER#
+  </update>
+      <select id="selectByCondition" parameterClass="com.atu.erp.domain.query.ServiceCategoryQuery" resultMap="ServiceCategoryResult"  >
+    select category_id, category_name, category_level, parent_category_id, sort_number, yn, created, modified
+    from service_category
+    <include refid="ServiceCategory.condition" />
+    order by sort_number
+  </select>
+  <delete id="deleteCategory1" parameterClass="java.lang.Integer">
+    delete from service_category where category_id=#categoryId# 
+  </delete>
+  
+  
+    <delete id="deleteCategory2ByPar" parameterClass="java.lang.Integer">
+    delete from service_category where parent_category_id=#parentCategoryId# 
+  </delete>
+</sqlMap>

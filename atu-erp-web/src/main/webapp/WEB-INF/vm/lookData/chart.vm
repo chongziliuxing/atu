@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="expires" content="0" />
+		<meta http-equiv="pragma" content="no-cache" />
+		<meta http-equiv="cache-control" content="no-cache, must-revalidate" />
+    	<meta http-equiv="expires" content="0" />
+        <title>全站流量(曲线图)</title>
+        
+        <link type="text/css" rel="stylesheet" href="/misc/css/admin.css"/>
+        <link type='text/css' rel="stylesheet" href='/misc/css/basic1.css'/>
+        <link type="text/css" rel="stylesheet" href="/misc/css/chart.css"/>
+        <link type="text/css" rel="stylesheet" href="/css/H-ui.min.css"/>
+		<link type="text/css" rel="stylesheet" href="/css/H-ui.admin.css"/>
+		<link type="text/css" rel="stylesheet" href="/lib/Hui-iconfont/1.0.1/iconfont.css"/>
+        
+		<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script> 
+		<script type="text/javascript" src="/lib/layer/1.9.3/layer.js"></script>
+		<script type="text/javascript" src="/js/H-ui.js"></script> 
+		<script type="text/javascript" src="/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="/lib/Highcharts/4.1.7/js/highcharts.js"></script>
+		<script type="text/javascript" src="/lib/Highcharts/4.1.7/js/modules/exporting.js"></script>
+		<script type="text/javascript" src="/js/jquery.blockUI.js"></script>
+		<script language="javascript" src="$assetModule.getTarget("/My97DatePicker/WdatePicker.js")"></script>
+
+</head>
+<body>
+<!--盒子开始-->
+<div class="box"> 
+	<img id="loading" src="/img/load.gif" style="display: none;"></img>
+    <!--标题区开始-->
+    <div class="title">
+        <div class="left">
+            <div class="title_gl">全站流量概况分析</div>
+            <div class="title_fbt"></div>
+            <div class="bh"></div>
+        </div>
+    </div>
+    <!--标题区结束-->
+    <!--展示区开始-->
+    <form id="f1">
+    <div class="panel_search">
+    	<table border="0" cellpadding="0" cellspacing="2">
+    	    <tr>
+				<td align="right" style="width:100px">
+                	系统来源：
+                </td>
+                <td align="left" style="width:100px">
+                	<select id="projectId" name="projectId"  style="width: 130px; margin-left: 5px;">
+                		<option  #if($!query.projectId==0) selected="selected" #end value="0"> 全部 </option>
+						<option  #if($!query.projectId==10) selected="selected" #end value="10"> 电脑版 </option>
+						<option  #if($!query.projectId==20) selected="selected" #end value="20"> 网页版 </option>
+						<option  #if($!query.projectId==30) selected="selected" #end value="30"> 安卓版 </option>
+						<option  #if($!$!query.projectId==40) selected="selected" #end value="40"> 苹果版 </option>
+					</select>
+				</td>
+				<td align="right" style="width:100px">
+					时间：
+                </td>
+                 <td align="left" style="width:400px;">
+                	<input type="radio" name="days" value="-1" onclick="empty()" style="margin-left: 5px;"/>昨天
+                	<input type="radio" name="days" value="-2" onclick="empty()" style="margin-left: 15px;"/>前天
+                	<input type="radio" name="days" value="0" onclick="empty()" checked="checked" style="margin-left: 15px;"/>本月
+					<input type="text" id="startTime" name="startTime"  onclick="fmt()" value="$!{dateFormatUtils.format($!query.startTime,'yyyy-MM-dd')}" style="margin-left: 50px"/>至
+                    <input type="text" id="endTime" name="endTime"  onclick="fmt()" value="$!{dateFormatUtils.format($!query.endTime,'yyyy-MM-dd')}" />(当月)
+					<input type="button"  value="查询" onclick="getChart()" style="margin-left: 30px"/>                   
+				</td>	
+            </tr>
+        </table>
+    	<!-- <div class="panel">
+			<div class="panel3" style="background:red;" onclick="change(this)">
+				<span>1分</span>
+			</div>
+			<div class="panel3" style="background:red;" onclick="change(this)">
+				<span>5分</span>
+			</div>
+			<div class="panel3" style="background:red;" onclick="change(this)">
+				<span>15分</span>
+			</div>
+			<div class="panel3" style="background:red;" onclick="change(this)">
+				<span>30分</span>
+			</div>
+			<div class="panel3" style="background:red;" onclick="change(this)">
+				<span>时</span>
+			</div>
+			<div class="panel3" style="background:red;" onclick="change(this)">
+				<span>天</span>
+			</div>
+		</div> -->
+		<div class="panel">
+			<div class="panel1">
+				<span><img src="/img/survey/icon1.png" /></span>
+				<span>流量</span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="各页面被用户访问的次数。用户多次打开或刷新同一个页面，浏览量累加。"/> PV</span>
+				<span id="pv"></span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="各页面的访问人数。00:00-24:00内，同一访客多次访问只被计算一次。"/> UV</span>
+				<span id="uv"></span>
+			</div>
+			<div class="panel2">
+				<span><img src="/img/survey/icon.png" title="下单客户数/访客数。"/> 转化率</span>
+				<span id="conversionRate"></span>
+			</div>
+		</div>
+    </div>
+    </form>
+    <div class="pd-20">
+		<div id="container" style="min-width:700px;height:400px"></div>
+	</div>
+    <!--展示区结束	-->
+</div>   
+<!--盒子结束-->
+<script type="text/javascript">
+	$(function() {
+		getChart();
+	}); 
+	
+	function empty(){
+		var boolCheck = $("input:radio[name='days']").is(":checked");
+		if(boolCheck ==  true){
+			$("#startTime").val("");
+			$("#endTime").val("");
+		}
+	}
+		
+	function fmt(){
+		WdatePicker({dateFmt:'yyyy-MM-dd'});
+		$("input:radio[name='days']").attr("checked",false);
+	}
+	
+	function checkTime(){
+		var days = $("input[name='days']:checked");
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		var startArr = startTime.split("-");
+		var endArr = endTime.split("-");
+		
+		if(days.length == 0){
+			if(startTime == "" && endTime == ""){
+				alert("请选择时间！");
+				return false;
+			}
+			if(startTime == "" || endTime == ""){
+				alert("请填写完整的时间段！");
+				return false;
+			}
+			if((startArr[0] == endArr[0]) && (startArr[1] == endArr[1]) && (startArr[2] <= endArr[2])){
+				return true;
+			}else{
+				alert("请填写正确的开始时间和结束时间!");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	function getChart(){
+		if(checkTime()){
+			$(document).ajaxStart(function(){
+				$.blockUI({
+		            message: $('#loading'),
+		            css: {
+		                top:  ($(window).height() - 400) /2 + 'px',
+		                left: ($(window).width() - 400) /2 + 'px',
+		                width: '400px',
+		                border: 'none'
+		            },
+		            overlayCSS:  {
+	        			backgroundColor: '#fff'
+	        		}
+		        });
+			}).ajaxStop($.unblockUI);
+			
+			$.ajax({
+				url : "/lookData/chart",
+				type : "post",
+				dataType : "json",
+				data : $("#f1").serialize(),
+				success : function(data) {
+					if(data.success){
+						
+						$("#pv").text(data.riskStatPvuvOrders.pv);
+						$("#uv").text(data.riskStatPvuvOrders.uv);
+						$("#conversionRate").text(data.riskStatPvuvOrders.conversionRate+'%');
+						
+						var pv = eval(data.pv);
+						var uv = eval(data.uv);
+						var categories = eval(data.categories);
+						var conversionRate = eval(data.conversionRate);
+						
+						$('#container').highcharts({
+					        xAxis: {
+					            categories: categories
+					        },
+					        yAxis: {
+					            title: {
+					                text: ''
+					            },
+					            plotLines: [{
+					                value: 0,
+					                width: 1,
+					                color: '#808080'
+					            }]
+					        },
+					        tooltip: {
+					            valueSuffix: ''
+					        },
+					        legend: {
+					            layout: 'vertical',
+					            align: 'right',
+					            verticalAlign: 'middle',
+					            borderWidth: 0
+					        },
+					        series: [{
+					            name: '浏览量(pv)',
+					            data: pv
+					        }, {
+					            name: '访客数(uv)',
+					            data: uv
+					        },{
+					            name: '转化率',
+					            data: conversionRate
+					        }]
+					    });
+					    $(".highcharts-button").css("display","none");
+					    $(".highcharts-legend").attr('transform', 'translate(1477,0)');
+					}    
+				},
+				errot : function() {
+					alert("系统超时，请联系管理员！");
+				}
+			});	
+		}
+	}
+</script>
+</body>
+</html>
