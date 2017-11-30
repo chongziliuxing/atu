@@ -21,7 +21,7 @@ public interface AddressDao{
 	public void modify(Address address);
 
 	/**
-	 * 依据地址ID查询地址信息
+	 * 依据地址ID查询地址信息1
 	 * @param addressId
 	 * @return
 	 */
