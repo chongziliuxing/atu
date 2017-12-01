@@ -8,7 +8,7 @@ import com.atu.erp.domain.query.BrandQuery;
 public interface BrandDao {
 
 	/**
-	 * 添加品牌信息
+	 * 添加品牌信息1
 	 * @param category
 	 * @return
 	 */
